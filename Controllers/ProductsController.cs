@@ -1,0 +1,280 @@
+﻿using AutoMapper;
+using ecommerceApi.Data;
+using ecommerceApi.DTOs;
+using ecommerceApi.Entities;
+using ecommerceApi.Extensions;
+using ecommerceApi.RequestHelpers;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.EntityFrameworkCore;
+
+namespace ecommerceApi.Controllers
+{
+    public class ProductsController : BaseApiController
+    {
+        private readonly StoreContext _context;
+        private readonly IMapper _mapper;
+        private readonly IWebHostEnvironment _hostEnvironment;
+
+        public ProductsController(StoreContext context, IMapper mapper,IWebHostEnvironment hostEnvironment)
+        {
+            _mapper = mapper;
+            this._hostEnvironment = hostEnvironment;
+            _context = context;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<PagedList<Product>>> GetProducts([FromQuery] ProductParams? productParams)
+        {
+            // return await _context.Products.ToListAsync();
+            var query = _context.Products.Select(x=> new Product()
+            {
+                Id = x.Id,
+                Brand = x.Brand,
+                Name = x.Name,
+                Description = x.Description,
+                Price = x.Price,
+                QuantityInStock = x.QuantityInStock,
+                Type = x.Type,
+                IsFeatured = x.IsFeatured,
+                PictureUrl = String.Format("{0}://{1}{2}/Images/{3}",Request.Scheme,Request.Host,Request.PathBase, x.PictureUrl) ,
+            })
+            .Sort(productParams.OrderBy)
+            .Search(productParams.SearchTerm)
+            .Filter(productParams.Brands, productParams.Types)
+            .AsQueryable();
+
+            var products = await PagedList<Product>.ToPagedList(query, productParams.PageNumber, productParams.PageSize);
+
+            Response.AddPaginationHeader(products.MetaData);
+
+            return products;
+
+        }
+
+        [HttpGet]
+        [Route("GetFeaturedProducts")]
+
+        public async Task<ActionResult<PagedList<Product>>> GetFeaturedProducts()
+        {
+            var query = _context.Products.Where(p=> p.IsFeatured == true).Select(x => new Product()
+            {
+                Id = x.Id,
+                Brand = x.Brand,
+                Name = x.Name,
+                Description = x.Description,
+                Price = x.Price,
+                QuantityInStock = x.QuantityInStock,
+                Type = x.Type,
+                IsFeatured = x.IsFeatured,
+                PictureUrl = String.Format("{0}://{1}{2}/Images/{3}", Request.Scheme, Request.Host, Request.PathBase, x.PictureUrl),
+            }).AsQueryable();
+
+            var products = await PagedList<Product>.ToPagedList(query, 1, 10);
+
+
+            return products;
+        }
+
+        [HttpGet("{id}", Name = "GetProduct")]
+        public async Task<ActionResult<Product>> GetProduct(int id)
+        {
+            var product = await _context.Products.FindAsync(id);
+
+            if (product == null) return NotFound();
+
+            return product;
+
+        }
+
+        [HttpGet("filters")]
+        public async Task<IActionResult> GetFilters()
+        {
+            var brands = await _context.Products.Select(p => p.Brand).Distinct().ToListAsync();
+            var types = await _context.Products.Select(p => p.Type).Distinct().ToListAsync();
+
+            return Ok(new { brands, types });
+
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public async Task<ActionResult<Product>> CreateProduct([FromForm] CreateProductDto productDto)
+        {
+            
+            var product = _mapper.Map<Product>(productDto);
+
+            if (productDto.IsFeatured != true)
+            {
+                product.IsFeatured = false;
+            }
+
+            if (productDto.File != null)
+            {
+                var fileName = await WriteFile(productDto.File);
+
+                if (fileName.Length == 0)
+                    return BadRequest(new ProblemDetails { Title = "Problem uploading new image" });
+
+                product.PictureUrl = fileName;
+
+            }
+
+            _context.Products.Add(product);
+
+            var result = await _context.SaveChangesAsync() > 0;
+
+            if (result) return CreatedAtRoute("GetProduct", new { Id = product.Id }, product);
+
+            return BadRequest(new ProblemDetails { Title = "Problem creating new product" });
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut]
+        public async Task<ActionResult<Product>> UpdateProduct([FromForm] UpdateProductDto productDto)
+        {
+            var product = await _context.Products.FindAsync(productDto.Id);
+
+
+            if (product == null) return NotFound();
+
+            if (productDto.File != null)
+            {
+                var fileName = await WriteFile(productDto.File);
+
+                if (fileName.Length == 0)
+                    return BadRequest(new ProblemDetails { Title = "Problem uploading new image" });
+
+                product.PictureUrl = fileName;
+
+            }
+            else
+            {
+                product.PictureUrl = product.PictureUrl;
+
+            }
+
+            _mapper.Map(productDto, product);
+
+            var result = await _context.SaveChangesAsync() > 0;
+
+            if (result) return Ok(product);
+
+            return BadRequest(new ProblemDetails { Title = "Problem updating product" });
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteProduct(int id)
+        {
+            var product = await _context.Products.FindAsync(id);
+
+            if (product == null) return NotFound();
+
+            if (!string.IsNullOrEmpty(product.PictureUrl))
+            {
+
+                var filepath = Path.Combine(Directory.GetCurrentDirectory(), "..//var//lib//Upload//Images", product.PictureUrl);
+                if (System.IO.File.Exists(filepath))    
+                    System.IO.File.Delete(filepath);
+            }
+
+
+            _context.Products.Remove(product);
+
+            var result = await _context.SaveChangesAsync() > 0;
+
+            if (result) return Ok();
+
+            return BadRequest(new ProblemDetails { Title = "Problem deleting product" });
+        }
+
+        private async Task<string> WriteFile(IFormFile file)
+        {
+            if (_hostEnvironment.IsDevelopment())
+            {
+                var fileName = DateTime.Now.Ticks.ToString() + Path.GetExtension(file.FileName);
+                var filePath = Path.Combine(_hostEnvironment.ContentRootPath, "..\\var\\lib\\Upload\\Images", fileName);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(fileStream);
+                }
+
+                return fileName;
+            }
+            else
+            {
+
+                //string newfile = DateTime.Now.Ticks.ToString() + Path.GetExtension(file.FileName);
+                //using (FileStream fs = new FileStream(newfile, FileMode.Create, FileAccess.Write,
+                //    FileShare.None, 4096, useAsync: true))
+                //{
+                //    await file.CopyToAsync(fs);
+                //}
+                //return newfile;
+
+                var fileName = DateTime.Now.Ticks.ToString() + Path.GetExtension(file.FileName);
+                var filePath = Path.Combine(_hostEnvironment.ContentRootPath, "..//var//lib//Upload//Images", fileName);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(fileStream);
+                }
+
+                return fileName;
+            }
+                
+                
+
+        }
+
+        private async Task<string> GetFilePath(string filename)
+        {
+
+            var filepath = Path.Combine(Directory.GetCurrentDirectory(), "..\\var\\lib\\Upload\\Images", filename);
+            var provider = new FileExtensionContentTypeProvider();
+
+
+            if (!provider.TryGetContentType(filepath, out var contenttype))
+            {
+                contenttype = "application/octet-stream";
+
+            }
+
+            var bytes = await System.IO.File.ReadAllBytesAsync(filepath);
+
+
+            //return File(bytes, contenttype, Path.GetFileName(filepath));
+            return filepath;
+
+        }
+
+
+        [NonAction]
+         public void DeleteImage(string filename)
+        {
+            if (_hostEnvironment.IsDevelopment())
+            {
+                var filepath = Path.Combine(Directory.GetCurrentDirectory(), "..\\var\\lib\\Upload\\Images", filename);
+
+                if (System.IO.File.Exists(filepath))
+                    System.IO.File.Delete(filepath);
+            }
+            else
+            {
+                var filepath = Path.Combine(Directory.GetCurrentDirectory(), "..//var//lib//Upload//Images", filename);
+
+                if (System.IO.File.Exists(filepath))
+                    System.IO.File.Delete(filepath);
+
+            }
+
+               
+            
+      
+
+        }
+    }
+}
