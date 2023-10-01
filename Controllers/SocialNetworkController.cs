@@ -1,0 +1,177 @@
+﻿using AutoMapper;
+using ecommerceApi.Data;
+using ecommerceApi.DTOs;
+using ecommerceApi.Entities;
+using ecommerceApi.Extensions;
+using ecommerceApi.RequestHelpers;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace ecommerceApi.Controllers
+{
+    public class SocialNetworkController:BaseApiController
+    {
+        private readonly StoreContext _context;
+        private readonly IMapper _mapper;
+        private readonly IWebHostEnvironment _hostEnvironment;
+
+        public SocialNetworkController(StoreContext context, IMapper mapper, IWebHostEnvironment hostEnvironment)
+        {
+            _mapper = mapper;
+            this._hostEnvironment = hostEnvironment;
+            _context = context;
+        }
+
+
+        [HttpGet]
+        public async Task<ActionResult<PagedList<SocialNetwork>>> GetSocialNetworks([FromQuery] PaginationParams? paginationParams)
+        {
+            // return await _context.Products.ToListAsync();
+            var query = _context.SocialNetworks.Select(x => new SocialNetwork()
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Link=x.Link,
+                PictureUrl = String.Format("{0}://{1}{2}/Images/{3}", Request.Scheme, Request.Host, Request.PathBase, x.PictureUrl),
+                Priority = x.Priority,
+            }).AsQueryable();
+
+            var socialNetwork = await PagedList<SocialNetwork>.ToPagedList(query, paginationParams.PageNumber, paginationParams.PageSize);
+
+            Response.AddPaginationHeader(socialNetwork.MetaData);
+
+            return socialNetwork;
+
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public async Task<ActionResult<SocialNetwork>> CreateSocialNetwork([FromForm] SocialNetworkDto socialNetworkDto)
+        {
+
+            var socialNetwork = _mapper.Map<SocialNetwork>(socialNetworkDto);
+
+        
+
+            if (socialNetworkDto.File != null)
+            {
+                var fileName = await WriteFile(socialNetworkDto.File);
+
+                if (fileName.Length == 0)
+                    return BadRequest(new ProblemDetails { Title = "Problem uploading new image" });
+
+                socialNetwork.PictureUrl = fileName;
+
+            }
+
+            _context.SocialNetworks.Add(socialNetwork);
+
+            var result = await _context.SaveChangesAsync() > 0;
+
+            if (result) return Ok(socialNetwork);
+
+            return BadRequest(new ProblemDetails { Title = "Problem creating new Social Network" });
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut]
+        public async Task<ActionResult<SocialNetwork>> UpdateSocialNetwork([FromForm] UpdateSocialNetworkDto updateSocialNetworkDto)
+        {
+            var socialNetwork = await _context.SocialNetworks.FindAsync(updateSocialNetworkDto.Id);
+
+
+            if (socialNetwork == null) return NotFound();
+
+            if (updateSocialNetworkDto.File != null)
+            {
+                var fileName = await WriteFile(updateSocialNetworkDto.File);
+
+                if (fileName.Length == 0)
+                    return BadRequest(new ProblemDetails { Title = "Problem uploading new image" });
+
+                socialNetwork.PictureUrl = fileName;
+
+            }
+            else
+            {
+                socialNetwork.PictureUrl = socialNetwork.PictureUrl;
+
+            }
+
+            _mapper.Map(updateSocialNetworkDto, socialNetwork);
+
+            var result = await _context.SaveChangesAsync() > 0;
+
+            if (result) return Ok(socialNetwork);
+
+            return BadRequest(new ProblemDetails { Title = "Problem updating social network" });
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteSocialNetwork(int id)
+        {
+            var socialNetwork = await _context.SocialNetworks.FindAsync(id);
+
+            if (socialNetwork == null) return NotFound();
+
+            if (!string.IsNullOrEmpty(socialNetwork.PictureUrl))
+            {
+
+                var filepath = Path.Combine(Directory.GetCurrentDirectory(), "..//var//lib//Upload//Images", socialNetwork.PictureUrl);
+                if (System.IO.File.Exists(filepath))
+                    System.IO.File.Delete(filepath);
+            }
+
+
+            _context.SocialNetworks.Remove(socialNetwork);
+
+            var result = await _context.SaveChangesAsync() > 0;
+
+            if (result) return Ok();
+
+            return BadRequest(new ProblemDetails { Title = "Problem deleting social network" });
+        }
+
+        private async Task<string> WriteFile(IFormFile file)
+        {
+            if (_hostEnvironment.IsDevelopment())
+            {
+                var fileName = DateTime.Now.Ticks.ToString() + Path.GetExtension(file.FileName);
+                var filePath = Path.Combine(_hostEnvironment.ContentRootPath, "..\\var\\lib\\Upload\\Images", fileName);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(fileStream);
+                }
+
+                return fileName;
+            }
+            else
+            {
+
+                //string newfile = DateTime.Now.Ticks.ToString() + Path.GetExtension(file.FileName);
+                //using (FileStream fs = new FileStream(newfile, FileMode.Create, FileAccess.Write,
+                //    FileShare.None, 4096, useAsync: true))
+                //{
+                //    await file.CopyToAsync(fs);
+                //}
+                //return newfile;
+
+                var fileName = DateTime.Now.Ticks.ToString() + Path.GetExtension(file.FileName);
+                var filePath = Path.Combine(_hostEnvironment.ContentRootPath, "..//var//lib//Upload//Images", fileName);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(fileStream);
+                }
+
+                return fileName;
+            }
+
+
+
+        }
+
+    }
+}

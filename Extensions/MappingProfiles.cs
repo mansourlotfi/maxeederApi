@@ -15,6 +15,7 @@ namespace ecommerceApi.Extensions
             CreateMap<CreateBrokerDto, Broker>();
             CreateMap<CreateSettingsDto, Setting>();
             CreateMap<CeoOptimizationDto, CeoOptimization>();
+            CreateMap<SocialNetworkDto,SocialNetwork > ();
         }
     }
 }

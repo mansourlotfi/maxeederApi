@@ -20,8 +20,9 @@ namespace ecommerceApi.Data
         public DbSet<Setting> Settings { get; set; }
         public DbSet<CeoOptimization> CeoOptimizations { get; set; }
         public DbSet<CustomUserRole> CustomUserRoles { get; set; }
+        public DbSet<SocialNetwork> SocialNetworks { get; set; }
 
-        
+
 
 
         protected override void OnModelCreating(ModelBuilder builder)
