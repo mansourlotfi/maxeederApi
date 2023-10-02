@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ecommerceApi.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class RoleEntity : Migration
+    public partial class logoEntity : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -127,6 +127,37 @@ namespace ecommerceApi.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Logos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Link = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PictureUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Priority = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Logos", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MainMenuItems",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Link = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Priority = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MainMenuItems", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Orders",
                 columns: table => new
                 {
@@ -172,6 +203,21 @@ namespace ecommerceApi.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "QuickAccess",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Link = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Priority = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_QuickAccess", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Settings",
                 columns: table => new
                 {
@@ -188,6 +234,22 @@ namespace ecommerceApi.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Settings", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SocialNetworks",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Link = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PictureUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Priority = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SocialNetworks", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -393,8 +455,8 @@ namespace ecommerceApi.Data.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, "30e80302-33e1-4508-9d9b-53ca6a8d1819", "Member", "MEMBER" },
-                    { 2, "6f7b87bb-b6aa-4fa7-91dc-c3e2a1491b86", "Admin", "ADMIN" }
+                    { 1, "f82f086f-a0d6-4835-9e78-9ac278ca3366", "Member", "MEMBER" },
+                    { 2, "2beb8744-96dc-4c84-8c60-fdf3a790dfeb", "Admin", "ADMIN" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -452,9 +514,33 @@ namespace ecommerceApi.Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Logos_Priority",
+                table: "Logos",
+                column: "Priority",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MainMenuItems_Priority",
+                table: "MainMenuItems",
+                column: "Priority",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OrderItem_OrderId",
                 table: "OrderItem",
                 column: "OrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_QuickAccess_Priority",
+                table: "QuickAccess",
+                column: "Priority",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SocialNetworks_Priority",
+                table: "SocialNetworks",
+                column: "Priority",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -494,10 +580,22 @@ namespace ecommerceApi.Data.Migrations
                 name: "CustomUserRoles");
 
             migrationBuilder.DropTable(
+                name: "Logos");
+
+            migrationBuilder.DropTable(
+                name: "MainMenuItems");
+
+            migrationBuilder.DropTable(
                 name: "OrderItem");
 
             migrationBuilder.DropTable(
+                name: "QuickAccess");
+
+            migrationBuilder.DropTable(
                 name: "Settings");
+
+            migrationBuilder.DropTable(
+                name: "SocialNetworks");
 
             migrationBuilder.DropTable(
                 name: "UserAddress");

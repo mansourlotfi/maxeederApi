@@ -21,7 +21,9 @@ namespace ecommerceApi.Data
         public DbSet<CeoOptimization> CeoOptimizations { get; set; }
         public DbSet<CustomUserRole> CustomUserRoles { get; set; }
         public DbSet<SocialNetwork> SocialNetworks { get; set; }
-
+        public DbSet<MainMenu> MainMenuItems { get; set; }
+        public DbSet<QuickAccess> QuickAccess { get; set; }
+        public DbSet<Logo> Logos { get; set; }
 
 
 
@@ -35,10 +37,12 @@ namespace ecommerceApi.Data
                .HasForeignKey<UserAddress>(a => a.Id)
                .OnDelete(DeleteBehavior.Cascade);
 
+            builder.Entity<SocialNetwork>().HasIndex(u => u.Priority).IsUnique();
+            builder.Entity<MainMenu>().HasIndex(u => u.Priority).IsUnique();
+            builder.Entity<QuickAccess>().HasIndex(u => u.Priority).IsUnique();
+            builder.Entity<Logo>().HasIndex(u => u.Priority).IsUnique();
 
             //builder.Entity<Setting>().Property(p => p.Id).ValueGeneratedNever();
-
-
 
             builder.Entity<Role>()
             .HasData(

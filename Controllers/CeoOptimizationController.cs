@@ -12,7 +12,6 @@ namespace ecommerceApi.Controllers
     {
             private readonly StoreContext _context;
             private readonly IMapper _mapper;
-            private readonly IWebHostEnvironment _hostEnvironment;
         public CeoOptimizationController(StoreContext context, IMapper mapper)
         {
             _mapper = mapper;

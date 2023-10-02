@@ -12,8 +12,8 @@ using ecommerceApi.Data;
 namespace ecommerceApi.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20231001101027_socialNetwork")]
-    partial class socialNetwork
+    [Migration("20231001152123_logoEntity")]
+    partial class logoEntity
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -280,6 +280,64 @@ namespace ecommerceApi.Data.Migrations
                     b.ToTable("CustomUserRoles");
                 });
 
+            modelBuilder.Entity("ecommerceApi.Entities.Logo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Link")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PictureUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Priority")
+                        .IsUnique();
+
+                    b.ToTable("Logos");
+                });
+
+            modelBuilder.Entity("ecommerceApi.Entities.MainMenu", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Link")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Priority")
+                        .IsUnique();
+
+                    b.ToTable("MainMenuItems");
+                });
+
             modelBuilder.Entity("ecommerceApi.Entities.OrderAggregate.Order", b =>
                 {
                     b.Property<int>("Id")
@@ -382,6 +440,33 @@ namespace ecommerceApi.Data.Migrations
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("ecommerceApi.Entities.QuickAccess", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Link")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Priority")
+                        .IsUnique();
+
+                    b.ToTable("QuickAccess");
+                });
+
             modelBuilder.Entity("ecommerceApi.Entities.Role", b =>
                 {
                     b.Property<int>("Id")
@@ -415,14 +500,14 @@ namespace ecommerceApi.Data.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "a72ed4e3-8a25-48ad-b88f-4ae9e7462428",
+                            ConcurrencyStamp = "f82f086f-a0d6-4835-9e78-9ac278ca3366",
                             Name = "Member",
                             NormalizedName = "MEMBER"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "a14dc721-acee-4ea4-8008-c4f81aea8fed",
+                            ConcurrencyStamp = "2beb8744-96dc-4c84-8c60-fdf3a790dfeb",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -487,6 +572,9 @@ namespace ecommerceApi.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Priority")
+                        .IsUnique();
 
                     b.ToTable("SocialNetworks");
                 });

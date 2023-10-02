@@ -10,13 +10,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ecommerceApi.Controllers
 {
-    public class SocialNetworkController:BaseApiController
+    public class LogoController:BaseApiController
     {
+     
         private readonly StoreContext _context;
         private readonly IMapper _mapper;
         private readonly IWebHostEnvironment _hostEnvironment;
 
-        public SocialNetworkController(StoreContext context, IMapper mapper, IWebHostEnvironment hostEnvironment)
+        public LogoController(StoreContext context, IMapper mapper, IWebHostEnvironment hostEnvironment)
         {
             _mapper = mapper;
             this._hostEnvironment = hostEnvironment;
@@ -25,119 +26,126 @@ namespace ecommerceApi.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<PagedList<SocialNetwork>>> GetSocialNetworks([FromQuery] PaginationParams? paginationParams)
+        public async Task<ActionResult<PagedList<Logo>>> GetLogos([FromQuery] PaginationParams? paginationParams)
         {
-            // return await _context.Products.ToListAsync();
-            var query = _context.SocialNetworks.Select(x => new SocialNetwork()
+            // return await _context.Logos.ToListAsync();
+            var query = _context.Logos.Select(x => new Logo()
             {
                 Id = x.Id,
                 Name = x.Name,
-                Link=x.Link,
+                Link = x.Link,
                 PictureUrl = String.Format("{0}://{1}{2}/Images/{3}", Request.Scheme, Request.Host, Request.PathBase, x.PictureUrl),
                 Priority = x.Priority,
             }).AsQueryable();
 
-            var socialNetwork = await PagedList<SocialNetwork>.ToPagedList(query, paginationParams.PageNumber, paginationParams.PageSize);
+            var logo = await PagedList<Logo>.ToPagedList(query, paginationParams.PageNumber, paginationParams.PageSize);
 
-            Response.AddPaginationHeader(socialNetwork.MetaData);
+            Response.AddPaginationHeader(logo.MetaData);
 
-            return socialNetwork;
+            return logo;
+
+        }
+
+        [HttpGet("{id}", Name = "GetLogo")]
+        public async Task<ActionResult<Logo>> GetLogo(int id)
+        {
+            var logo = await _context.Logos.FindAsync(id);
+
+            if (logo == null) return NotFound();
+
+            return logo;
 
         }
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<ActionResult<SocialNetwork>> CreateSocialNetwork([FromForm] SocialNetworkDto socialNetworkDto)
+        public async Task<ActionResult<Logo>> Createlogo([FromForm] LogoDto logoDto)
         {
-            var existing = await _context.SocialNetworks.FirstOrDefaultAsync(x => x.Priority == socialNetworkDto.Priority);
+            var existing = await _context.Logos.FirstOrDefaultAsync(x => x.Priority == logoDto.Priority);
             if (existing != null) return BadRequest(new ProblemDetails { Title = "Item with this priority exist" });
 
-            var socialNetwork = _mapper.Map<SocialNetwork>(socialNetworkDto);
+            var logo = _mapper.Map<Logo>(logoDto);
 
-        
-
-            if (socialNetworkDto.File != null)
+            if (logoDto.File != null)
             {
-                var fileName = await WriteFile(socialNetworkDto.File);
+                var fileName = await WriteFile(logoDto.File);
 
                 if (fileName.Length == 0)
                     return BadRequest(new ProblemDetails { Title = "Problem uploading new image" });
 
-                socialNetwork.PictureUrl = fileName;
+                logo.PictureUrl = fileName;
 
             }
 
-            _context.SocialNetworks.Add(socialNetwork);
+            _context.Logos.Add(logo);
 
             var result = await _context.SaveChangesAsync() > 0;
 
-            if (result) return Ok(socialNetwork);
+            if (result) return Ok(logo);
 
-            return BadRequest(new ProblemDetails { Title = "Problem creating new Social Network" });
+            return BadRequest(new ProblemDetails { Title = "Problem creating new logo" });
         }
 
         [Authorize(Roles = "Admin")]
         [HttpPut]
-        public async Task<ActionResult<SocialNetwork>> UpdateSocialNetwork([FromForm] UpdateSocialNetworkDto updateSocialNetworkDto)
+        public async Task<ActionResult<Logo>> UpdateLogo([FromForm] UpdateLogoDto updateLogoDto)
         {
-            var socialNetwork = await _context.SocialNetworks.FindAsync(updateSocialNetworkDto.Id);
+            var logo = await _context.Logos.FindAsync(updateLogoDto.Id);
 
+            if (logo == null) return NotFound();
 
-            if (socialNetwork == null) return NotFound();
-
-
-            var existing = await _context.SocialNetworks.FirstOrDefaultAsync(x => x.Priority == updateSocialNetworkDto.Priority && updateSocialNetworkDto.Priority != socialNetwork.Priority);
+            var existing = await _context.Logos.FirstOrDefaultAsync(x => x.Priority == updateLogoDto.Priority && updateLogoDto.Priority != logo.Priority);
             if (existing != null) return BadRequest(new ProblemDetails { Title = "Item with this priority exist" });
 
-            if (updateSocialNetworkDto.File != null)
+            if (updateLogoDto.File != null)
             {
-                var fileName = await WriteFile(updateSocialNetworkDto.File);
+                var fileName = await WriteFile(updateLogoDto.File);
 
                 if (fileName.Length == 0)
                     return BadRequest(new ProblemDetails { Title = "Problem uploading new image" });
 
-                socialNetwork.PictureUrl = fileName;
+                logo.PictureUrl = fileName;
 
             }
             else
             {
-                socialNetwork.PictureUrl = socialNetwork.PictureUrl;
+                logo.PictureUrl = logo.PictureUrl;
 
             }
 
-            _mapper.Map(updateSocialNetworkDto, socialNetwork);
+            _mapper.Map(updateLogoDto, logo);
 
             var result = await _context.SaveChangesAsync() > 0;
 
-            if (result) return Ok(socialNetwork);
+            if (result) return Ok(logo);
 
-            return BadRequest(new ProblemDetails { Title = "Problem updating social network" });
+            return BadRequest(new ProblemDetails { Title = "Problem updating logo" });
         }
 
         [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteSocialNetwork(int id)
+        public async Task<ActionResult> DeleteLogo(int id)
         {
-            var socialNetwork = await _context.SocialNetworks.FindAsync(id);
+            var logo = await _context.Logos.FindAsync(id);
 
-            if (socialNetwork == null) return NotFound();
+            if (logo == null) return NotFound();
 
-            if (!string.IsNullOrEmpty(socialNetwork.PictureUrl))
+            if (!string.IsNullOrEmpty(logo.PictureUrl))
             {
 
-                var filepath = Path.Combine(Directory.GetCurrentDirectory(), "..//var//lib//Upload//Images", socialNetwork.PictureUrl);
+                var filepath = Path.Combine(Directory.GetCurrentDirectory(), "..//var//lib//Upload//Images", logo.PictureUrl);
                 if (System.IO.File.Exists(filepath))
                     System.IO.File.Delete(filepath);
             }
 
 
-            _context.SocialNetworks.Remove(socialNetwork);
+            _context.Logos.Remove(logo);
 
             var result = await _context.SaveChangesAsync() > 0;
 
             if (result) return Ok();
 
-            return BadRequest(new ProblemDetails { Title = "Problem deleting social network" });
+            return BadRequest(new ProblemDetails { Title = "Problem deleting logo" });
         }
 
         private async Task<string> WriteFile(IFormFile file)
@@ -180,5 +188,6 @@ namespace ecommerceApi.Controllers
 
         }
 
+    
     }
 }

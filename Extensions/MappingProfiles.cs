@@ -16,6 +16,12 @@ namespace ecommerceApi.Extensions
             CreateMap<CreateSettingsDto, Setting>();
             CreateMap<CeoOptimizationDto, CeoOptimization>();
             CreateMap<SocialNetworkDto,SocialNetwork > ();
+            CreateMap<QuickAccessDto, QuickAccess > ();
+            CreateMap<LogoDto, Logo>();
+            CreateMap<UpdateLogoDto, Logo>();
+                    
+
+
         }
     }
 }
