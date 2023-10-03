@@ -25,8 +25,10 @@ namespace ecommerceApi.Data
         public DbSet<QuickAccess> QuickAccess { get; set; }
         public DbSet<Logo> Logos { get; set; }
         public DbSet<Slide> Slides { get; set; }
+        public DbSet<Partner> Partners { get; set; }
+            
 
-        
+
 
 
 

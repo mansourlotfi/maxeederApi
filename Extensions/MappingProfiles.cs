@@ -21,6 +21,10 @@ namespace ecommerceApi.Extensions
             CreateMap<UpdateLogoDto, Logo>();
             CreateMap<CreateSlideDto, Slide>();
             CreateMap<UpdateSlideDto, Slide>();
+            CreateMap<PartnerDto, Partner>();
+            CreateMap<UpdatePartnerDto, Partner>();
+
+            
 
         }
     }
