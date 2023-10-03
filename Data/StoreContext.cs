@@ -29,8 +29,8 @@ namespace ecommerceApi.Data
         public DbSet<Artist> Artists { get; set; }
         public DbSet<PageItem> PageItems { get; set; }
         public DbSet<Department> Departments { get; set; }
+        public DbSet<Message> Messages { get; set; }
 
-        
 
 
 
