@@ -10,133 +10,132 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ecommerceApi.Controllers
 {
-    public class SocialNetworkController:BaseApiController
+    public class SlidesController:BaseApiController
     {
         private readonly StoreContext _context;
         private readonly IMapper _mapper;
         private readonly IWebHostEnvironment _hostEnvironment;
-
-        public SocialNetworkController(StoreContext context, IMapper mapper, IWebHostEnvironment hostEnvironment)
+        public SlidesController(StoreContext context, IMapper mapper, IWebHostEnvironment hostEnvironment)
         {
             _mapper = mapper;
             this._hostEnvironment = hostEnvironment;
             _context = context;
         }
 
-
         [HttpGet]
-        public async Task<ActionResult<PagedList<SocialNetwork>>> GetSocialNetworks([FromQuery] PaginationParams? paginationParams)
+        public async Task<ActionResult<PagedList<Slide>>> GetSlides([FromQuery] SlideParams? slideParams)
         {
             // return await _context.Products.ToListAsync();
-            var query = _context.SocialNetworks.Select(x => new SocialNetwork()
+            var query = _context.Slides.Where(x=>x.Page == slideParams.Page).Select(x => new Slide()
             {
                 Id = x.Id,
                 Name = x.Name,
-                Link=x.Link,
+                Link = x.Link,
                 PictureUrl = String.Format("{0}://{1}{2}/Images/{3}", Request.Scheme, Request.Host, Request.PathBase, x.PictureUrl),
                 Priority = x.Priority,
+                Page=x.Page,
             }).AsQueryable();
 
-            var socialNetwork = await PagedList<SocialNetwork>.ToPagedList(query, paginationParams.PageNumber, paginationParams.PageSize);
+            var slides = await PagedList<Slide>.ToPagedList(query, slideParams.PageNumber, slideParams.PageSize);
 
-            Response.AddPaginationHeader(socialNetwork.MetaData);
+            Response.AddPaginationHeader(slides.MetaData);
 
-            return socialNetwork;
+            return slides;
 
         }
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<ActionResult<SocialNetwork>> CreateSocialNetwork([FromForm] SocialNetworkDto socialNetworkDto)
+        public async Task<ActionResult<Slide>> CreateSlide([FromForm] CreateSlideDto createSlideDto)
         {
-            var existing = await _context.SocialNetworks.FirstOrDefaultAsync(x => x.Priority == socialNetworkDto.Priority);
+            var existing = await _context.Slides.FirstOrDefaultAsync(x => x.Priority == createSlideDto.Priority);
             if (existing != null) return BadRequest(new ProblemDetails { Title = "Item with this priority exist" });
 
-            var socialNetwork = _mapper.Map<SocialNetwork>(socialNetworkDto);
+            var slide = _mapper.Map<Slide>(createSlideDto);
 
-        
 
-            if (socialNetworkDto.File != null)
+
+            if (createSlideDto.File != null)
             {
-                var fileName = await WriteFile(socialNetworkDto.File);
+                var fileName = await WriteFile(createSlideDto.File);
 
                 if (fileName.Length == 0)
                     return BadRequest(new ProblemDetails { Title = "Problem uploading new image" });
 
-                socialNetwork.PictureUrl = fileName;
+                slide.PictureUrl = fileName;
 
             }
 
-            _context.SocialNetworks.Add(socialNetwork);
+            _context.Slides.Add(slide);
 
             var result = await _context.SaveChangesAsync() > 0;
 
-            if (result) return Ok(socialNetwork);
+            if (result) return Ok(slide);
 
-            return BadRequest(new ProblemDetails { Title = "Problem creating new Social Network" });
+            return BadRequest(new ProblemDetails { Title = "Problem creating new slide" });
         }
 
         [Authorize(Roles = "Admin")]
         [HttpPut]
-        public async Task<ActionResult<SocialNetwork>> UpdateSocialNetwork([FromForm] UpdateSocialNetworkDto updateSocialNetworkDto)
+        public async Task<ActionResult<Slide>> UpdateSlide([FromForm] UpdateSlideDto updateSlideDto)
         {
-            var socialNetwork = await _context.SocialNetworks.FindAsync(updateSocialNetworkDto.Id);
+            var slide = await _context.Slides.FindAsync(updateSlideDto.Id);
 
 
-            if (socialNetwork == null) return NotFound();
+            if (slide == null) return NotFound();
 
-            var existing = await _context.SocialNetworks.FirstOrDefaultAsync(x => x.Priority == updateSocialNetworkDto.Priority && updateSocialNetworkDto.Priority != socialNetwork.Priority);
+            var existing = await _context.Slides.FirstOrDefaultAsync(x => x.Priority == updateSlideDto.Priority && updateSlideDto.Priority != slide.Priority);
             if (existing != null) return BadRequest(new ProblemDetails { Title = "Item with this priority exist" });
 
-            if (updateSocialNetworkDto.File != null)
+            if (updateSlideDto.File != null)
             {
-                var fileName = await WriteFile(updateSocialNetworkDto.File);
+                var fileName = await WriteFile(updateSlideDto.File);
 
                 if (fileName.Length == 0)
                     return BadRequest(new ProblemDetails { Title = "Problem uploading new image" });
 
-                socialNetwork.PictureUrl = fileName;
+                slide.PictureUrl = fileName;
 
             }
             else
             {
-                socialNetwork.PictureUrl = socialNetwork.PictureUrl;
+                slide.PictureUrl = slide.PictureUrl;
 
             }
 
-            _mapper.Map(updateSocialNetworkDto, socialNetwork);
+            _mapper.Map(updateSlideDto, slide);
 
             var result = await _context.SaveChangesAsync() > 0;
 
-            if (result) return Ok(socialNetwork);
+            if (result) return Ok(slide);
 
-            return BadRequest(new ProblemDetails { Title = "Problem updating social network" });
+            return BadRequest(new ProblemDetails { Title = "Problem updating slide" });
         }
 
         [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteSocialNetwork(int id)
+        public async Task<ActionResult> DeleteSlide(int id)
         {
-            var socialNetwork = await _context.SocialNetworks.FindAsync(id);
+            var slide = await _context.Slides.FindAsync(id);
 
-            if (socialNetwork == null) return NotFound();
+            if (slide == null) return NotFound();
 
-            if (!string.IsNullOrEmpty(socialNetwork.PictureUrl))
+            if (!string.IsNullOrEmpty(slide.PictureUrl))
             {
 
-                var filepath = Path.Combine(Directory.GetCurrentDirectory(), "..//var//lib//Upload//Images", socialNetwork.PictureUrl);
+                var filepath = Path.Combine(Directory.GetCurrentDirectory(), "..//var//lib//Upload//Images", slide.PictureUrl);
                 if (System.IO.File.Exists(filepath))
                     System.IO.File.Delete(filepath);
             }
 
 
-            _context.SocialNetworks.Remove(socialNetwork);
+            _context.Slides.Remove(slide);
 
             var result = await _context.SaveChangesAsync() > 0;
 
             if (result) return Ok();
 
-            return BadRequest(new ProblemDetails { Title = "Problem deleting social network" });
+            return BadRequest(new ProblemDetails { Title = "Problem deleting slide" });
         }
 
         private async Task<string> WriteFile(IFormFile file)
@@ -178,6 +177,5 @@ namespace ecommerceApi.Controllers
 
 
         }
-
     }
 }

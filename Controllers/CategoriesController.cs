@@ -53,11 +53,16 @@ namespace ecommerceApi.Controllers
         public async Task<ActionResult<Category>> CreateCategory([FromForm] CreateCategoryDto categoryDto)
 
         {
+
+            var existing = await _context.Categories.FirstOrDefaultAsync(x => x.Priority == categoryDto.Priority);
+            if (existing != null) return BadRequest(new ProblemDetails { Title = "Item with this priority exist" });
+
             //var category = new Category()
             //{
             //    Id = Guid.NewGuid(),
             //    Name = categoryDto.Name
             //};
+
             var category = _mapper.Map<Category>(categoryDto);
 
             if (categoryDto.File != null)
@@ -78,6 +83,43 @@ namespace ecommerceApi.Controllers
             if (result) return CreatedAtRoute("GetCategory", new { Id = category.Id }, category);
 
             return BadRequest(new ProblemDetails { Title = "Problem creating new category" });
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut]
+        public async Task<ActionResult<Category>> UpdateCategory([FromForm] UpdateCategoryDto updateCategoryDto)
+        {
+            var category = await _context.Categories.FindAsync(updateCategoryDto.Id);
+
+
+            if (category == null) return NotFound();
+
+            var existing = await _context.Categories.FirstOrDefaultAsync(x => x.Priority == updateCategoryDto.Priority && updateCategoryDto.Priority != category.Priority);
+            if (existing != null) return BadRequest(new ProblemDetails { Title = "Item with this priority exist" });
+
+            if (updateCategoryDto.File != null)
+            {
+                var fileName = await WriteFile(updateCategoryDto.File);
+
+                if (fileName.Length == 0)
+                    return BadRequest(new ProblemDetails { Title = "Problem uploading new image" });
+
+                category.PictureUrl = fileName;
+
+            }
+            else
+            {
+                category.PictureUrl = category.PictureUrl;
+
+            }
+
+            _mapper.Map(updateCategoryDto, category);
+
+            var result = await _context.SaveChangesAsync() > 0;
+
+            if (result) return Ok(category);
+
+            return BadRequest(new ProblemDetails { Title = "Problem updating social network" });
         }
 
         [Authorize(Roles = "Admin")]

@@ -19,8 +19,8 @@ namespace ecommerceApi.Extensions
             CreateMap<QuickAccessDto, QuickAccess > ();
             CreateMap<LogoDto, Logo>();
             CreateMap<UpdateLogoDto, Logo>();
-                    
-
+            CreateMap<CreateSlideDto, Slide>();
+            CreateMap<UpdateSlideDto, Slide>();
 
         }
     }

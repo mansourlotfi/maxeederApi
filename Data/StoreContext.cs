@@ -24,6 +24,9 @@ namespace ecommerceApi.Data
         public DbSet<MainMenu> MainMenuItems { get; set; }
         public DbSet<QuickAccess> QuickAccess { get; set; }
         public DbSet<Logo> Logos { get; set; }
+        public DbSet<Slide> Slides { get; set; }
+
+        
 
 
 
@@ -41,6 +44,8 @@ namespace ecommerceApi.Data
             builder.Entity<MainMenu>().HasIndex(u => u.Priority).IsUnique();
             builder.Entity<QuickAccess>().HasIndex(u => u.Priority).IsUnique();
             builder.Entity<Logo>().HasIndex(u => u.Priority).IsUnique();
+            builder.Entity<Category>().HasIndex(u => u.Priority).IsUnique();
+            builder.Entity<Slide>().HasIndex(u => u.Priority).IsUnique();
 
             //builder.Entity<Setting>().Property(p => p.Id).ValueGeneratedNever();
 

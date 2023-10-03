@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace ecommerceApi.Data.Migrations
+namespace DataMigrations
 {
     /// <inheritdoc />
-    public partial class logoEntity : Migration
+    public partial class SlideEntity : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -105,7 +105,9 @@ namespace ecommerceApi.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PictureUrl = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Link = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PictureUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Priority = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -234,6 +236,23 @@ namespace ecommerceApi.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Settings", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Slides",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Link = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PictureUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Page = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Slides", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -455,8 +474,8 @@ namespace ecommerceApi.Data.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, "f82f086f-a0d6-4835-9e78-9ac278ca3366", "Member", "MEMBER" },
-                    { 2, "2beb8744-96dc-4c84-8c60-fdf3a790dfeb", "Admin", "ADMIN" }
+                    { 1, "5715eca0-2b69-4824-953e-806c9a9f7c1e", "Member", "MEMBER" },
+                    { 2, "978f76e3-c114-4d6c-973c-1f46eeab055e", "Admin", "ADMIN" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -509,6 +528,12 @@ namespace ecommerceApi.Data.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Categories_Priority",
+                table: "Categories",
+                column: "Priority",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CustomUserRoles_UserId",
                 table: "CustomUserRoles",
                 column: "UserId");
@@ -533,6 +558,12 @@ namespace ecommerceApi.Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_QuickAccess_Priority",
                 table: "QuickAccess",
+                column: "Priority",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Slides_Priority",
+                table: "Slides",
                 column: "Priority",
                 unique: true);
 
@@ -593,6 +624,9 @@ namespace ecommerceApi.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Settings");
+
+            migrationBuilder.DropTable(
+                name: "Slides");
 
             migrationBuilder.DropTable(
                 name: "SocialNetworks");

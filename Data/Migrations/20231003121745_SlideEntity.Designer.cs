@@ -9,11 +9,11 @@ using ecommerceApi.Data;
 
 #nullable disable
 
-namespace ecommerceApi.Data.Migrations
+namespace DataMigrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20231001152123_logoEntity")]
-    partial class logoEntity
+    [Migration("20231003121745_SlideEntity")]
+    partial class SlideEntity
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -226,6 +226,10 @@ namespace ecommerceApi.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Link")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -234,7 +238,13 @@ namespace ecommerceApi.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("Priority")
+                        .IsUnique();
 
                     b.ToTable("Categories");
                 });
@@ -500,14 +510,14 @@ namespace ecommerceApi.Data.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "f82f086f-a0d6-4835-9e78-9ac278ca3366",
+                            ConcurrencyStamp = "5715eca0-2b69-4824-953e-806c9a9f7c1e",
                             Name = "Member",
                             NormalizedName = "MEMBER"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "2beb8744-96dc-4c84-8c60-fdf3a790dfeb",
+                            ConcurrencyStamp = "978f76e3-c114-4d6c-973c-1f46eeab055e",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -546,6 +556,40 @@ namespace ecommerceApi.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Settings");
+                });
+
+            modelBuilder.Entity("ecommerceApi.Entities.Slide", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Link")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Page")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PictureUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Priority")
+                        .IsUnique();
+
+                    b.ToTable("Slides");
                 });
 
             modelBuilder.Entity("ecommerceApi.Entities.SocialNetwork", b =>
