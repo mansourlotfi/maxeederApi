@@ -26,8 +26,11 @@ namespace ecommerceApi.Data
         public DbSet<Logo> Logos { get; set; }
         public DbSet<Slide> Slides { get; set; }
         public DbSet<Partner> Partners { get; set; }
-            
+        public DbSet<Artist> Artists { get; set; }
+        public DbSet<PageItem> PageItems { get; set; }
+        public DbSet<Department> Departments { get; set; }
 
+        
 
 
 

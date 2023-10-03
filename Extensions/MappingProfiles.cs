@@ -11,6 +11,7 @@ namespace ecommerceApi.Extensions
             CreateMap<CreateProductDto, Product>();
             CreateMap<UpdateProductDto, Product>();
             CreateMap<CreateCategoryDto, Category>();
+            CreateMap<UpdateCategoryDto, Category>();
             CreateMap<CreateBrandDto, Brand>();
             CreateMap<CreateBrokerDto, Broker>();
             CreateMap<CreateSettingsDto, Setting>();
@@ -23,8 +24,12 @@ namespace ecommerceApi.Extensions
             CreateMap<UpdateSlideDto, Slide>();
             CreateMap<PartnerDto, Partner>();
             CreateMap<UpdatePartnerDto, Partner>();
-
-            
+            CreateMap<CreateArtistDto, Artist>();
+            CreateMap<UpdateArtistDto, Artist>();
+            CreateMap<CreatePageItemDto, PageItem>();
+            CreateMap<UpdatePageItemDto, PageItem>();
+            CreateMap<CreateDepartmentDto, Department>();
+                       
 
         }
     }

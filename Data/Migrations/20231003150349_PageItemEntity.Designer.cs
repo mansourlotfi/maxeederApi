@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ecommerceApi.Data;
 
@@ -11,9 +12,11 @@ using ecommerceApi.Data;
 namespace DataMigrations
 {
     [DbContext(typeof(StoreContext))]
-    partial class StoreContextModelSnapshot : ModelSnapshot
+    [Migration("20231003150349_PageItemEntity")]
+    partial class PageItemEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -315,23 +318,6 @@ namespace DataMigrations
                     b.ToTable("CustomUserRoles");
                 });
 
-            modelBuilder.Entity("ecommerceApi.Entities.Department", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Departments");
-                });
-
             modelBuilder.Entity("ecommerceApi.Entities.Logo", b =>
                 {
                     b.Property<int>("Id")
@@ -617,14 +603,14 @@ namespace DataMigrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "39903f85-6bac-40aa-9f84-f8e95473231e",
+                            ConcurrencyStamp = "11ee39f9-9e76-4a1f-b78f-3afaa574461f",
                             Name = "Member",
                             NormalizedName = "MEMBER"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "1af1e6ee-b8b4-46bc-b739-63485fe9b833",
+                            ConcurrencyStamp = "9d1627d5-e32f-475b-82a7-e7b4420ecee8",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
