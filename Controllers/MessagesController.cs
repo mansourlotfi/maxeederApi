@@ -2,6 +2,8 @@
 using ecommerceApi.Data;
 using ecommerceApi.DTOs;
 using ecommerceApi.Entities;
+using ecommerceApi.Extensions;
+using ecommerceApi.RequestHelpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -21,11 +23,27 @@ namespace ecommerceApi.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpGet]
-        public async Task<ActionResult<Message>> GetMessages()
+        public async Task<ActionResult<PagedList<Message>>> GetMessages([FromQuery] PaginationParams? paginationParams)
         {
-            var meessages = await _context.Messages.ToListAsync();
-            if (meessages == null) return NotFound();
-            return Ok(meessages);
+       
+
+            var query = _context.Messages.Select(x => new Message()
+            {
+                Id = x.Id,
+                Department = x.Department,
+                FullName = x.FullName,
+                Email = x.Email,
+                Subject = x.Subject,
+                Tel=x.Tel,
+                Text = x.Text,
+                AddedDate=x.AddedDate,
+            }).AsQueryable();
+
+            var meessages = await PagedList<Message>.ToPagedList(query, paginationParams.PageNumber, paginationParams.PageSize);
+
+            Response.AddPaginationHeader(meessages.MetaData);
+
+            return meessages;
         }
 
    
