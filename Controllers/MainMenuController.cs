@@ -62,7 +62,7 @@ namespace ecommerceApi.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPut]
-        public async Task<ActionResult<MainMenu>> UpdateMainMenu([FromForm] MainMenu updateMainMenuDto)
+        public async Task<ActionResult<MainMenu>> UpdateMainMenu([FromForm] UpdateMainMenuDto updateMainMenuDto)
         {
             var mainMenu = await _context.MainMenuItems.FindAsync(updateMainMenuDto.Id);
 

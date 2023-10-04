@@ -62,7 +62,7 @@ namespace ecommerceApi.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPut]
-        public async Task<ActionResult<QuickAccess>> UpdateQuickAccess([FromForm] QuickAccess updateQuickAccessDto)
+        public async Task<ActionResult<QuickAccess>> UpdateQuickAccess([FromForm] UpdateQuickAccessDto updateQuickAccessDto)
         {
             var menu = await _context.QuickAccess.FindAsync(updateQuickAccessDto.Id);
 
