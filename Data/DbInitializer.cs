@@ -21,7 +21,7 @@ namespace ecommerceApi.Data
                 var admin = new User
                 {
                     UserName = "admin",
-                    Email = "mansourlotfi@gmail.com"
+                    Email = "admin@maxeeder.com"
                 };
 
             

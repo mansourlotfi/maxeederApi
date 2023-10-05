@@ -28,7 +28,9 @@ namespace ecommerceApi.Controllers
             {
                 Id = x.Id,
                 Name = x.Name,
+                Link = x.Link,
                 PictureUrl = String.Format("{0}://{1}{2}/Images/{3}", Request.Scheme, Request.Host, Request.PathBase, x.PictureUrl),
+                Priority=x.Priority,
             }).ToListAsync();
                            
            if (categories == null) return NotFound();
