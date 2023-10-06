@@ -10,9 +10,9 @@ namespace ecommerceApi.DTOs
         [Required]
         public string Description { get; set; }
 
-        [Required]
+        //[Required]
         [Range(100, Double.PositiveInfinity)]
-        public long Price { get; set; }
+        public long? Price { get; set; }
 
         [Required]
         public IFormFile File { get; set; }
@@ -28,5 +28,7 @@ namespace ecommerceApi.DTOs
         public int QuantityInStock { get; set; }
 
         public bool? IsFeatured { get; set; } = false;
+        public List<int>? Features { get; set; } = new List<int>();
+
     }
 }

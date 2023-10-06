@@ -17,7 +17,7 @@ namespace ecommerceApi.Extensions
                 {
                     ProductId = item.ProductId,
                     Name = item.Product.Name,
-                    Price = item.Product.Price,
+                    Price = item.Product.Price??0,
                     PictureUrl = item.Product.PictureUrl,
                     Type = item.Product.Type,
                     Brand = item.Product.Brand,

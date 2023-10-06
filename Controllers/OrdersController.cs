@@ -66,7 +66,7 @@ namespace ecommerceApi.Controllers
                 var orderItem = new OrderItem
                 {
                     ItemOrdered = itemOrdered,
-                    Price = productItem.Price,
+                    Price = productItem.Price??0,
                     Quantity = item.Quantity
                 };
                 items.Add(orderItem);

@@ -28,7 +28,7 @@ namespace ecommerceApi.Controllers
         public async Task<ActionResult<PagedList<Product>>> GetProducts([FromQuery] ProductParams? productParams)
         {
             // return await _context.Products.ToListAsync();
-            var query = _context.Products.Select(x=> new Product()
+            var query = _context.Products.Include(x=>x.Features).ThenInclude(f=>f.Feature).Select(x=> new Product()
             {
                 Id = x.Id,
                 Brand = x.Brand,
@@ -39,6 +39,7 @@ namespace ecommerceApi.Controllers
                 Type = x.Type,
                 IsFeatured = x.IsFeatured,
                 PictureUrl = String.Format("{0}://{1}{2}/Images/{3}",Request.Scheme,Request.Host,Request.PathBase, x.PictureUrl) ,
+                Features=x.Features,
             })
             .Sort(productParams.OrderBy)
             .Search(productParams.SearchTerm)
@@ -69,6 +70,7 @@ namespace ecommerceApi.Controllers
                 Type = x.Type,
                 IsFeatured = x.IsFeatured,
                 PictureUrl = String.Format("{0}://{1}{2}/Images/{3}", Request.Scheme, Request.Host, Request.PathBase, x.PictureUrl),
+                Features=x.Features,
             }).AsQueryable();
 
             var products = await PagedList<Product>.ToPagedList(query, 1, 10);
@@ -80,7 +82,7 @@ namespace ecommerceApi.Controllers
         [HttpGet("{id}", Name = "GetProduct")]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
-            var product = await _context.Products.FindAsync(id);
+            var product = await _context.Products.Include(x => x.Features).ThenInclude(f => f.Feature).FirstOrDefaultAsync(x=>x.Id == id);
 
             if (product == null) return NotFound();
 
@@ -102,8 +104,20 @@ namespace ecommerceApi.Controllers
         [HttpPost]
         public async Task<ActionResult<Product>> CreateProduct([FromForm] CreateProductDto productDto)
         {
-            
+
             var product = _mapper.Map<Product>(productDto);
+            if (productDto.Features?.Count > 0)
+            {
+                foreach (var item in productDto.Features)
+                {
+                product.Features.Add(new ProductFeature()
+                {
+                    Product = product,
+                    FeatureId = item
+                });
+                }
+            }
+                                    
 
             if (productDto.IsFeatured != true)
             {
@@ -134,7 +148,7 @@ namespace ecommerceApi.Controllers
         [HttpPut]
         public async Task<ActionResult<Product>> UpdateProduct([FromForm] UpdateProductDto productDto)
         {
-            var product = await _context.Products.FindAsync(productDto.Id);
+            var product = await _context.Products.Include(x=>x.Features).ThenInclude(y=>y.Feature).FirstOrDefaultAsync(x=>x.Id == productDto.Id);
 
 
             if (product == null) return NotFound();
@@ -155,8 +169,28 @@ namespace ecommerceApi.Controllers
 
             }
 
+            if (productDto.Features?.Count > 0)
+            {
+               
+                var existingIds = product.Features.Select(x => x.FeatureId).ToList();
+                var selectedIds = productDto.Features.ToList();
+                var toAdd = selectedIds.Except(existingIds).ToList();
+                var toRemove = existingIds.Except(selectedIds).ToList();
+
+                product.Features = product.Features.Where(x => !toRemove.Contains(x.FeatureId)).ToList();
+                foreach (var item in toAdd)
+                {
+                    product.Features.Add(new ProductFeature
+                    {
+                        FeatureId = item
+                    });
+                }
+
+            }
+
             _mapper.Map(productDto, product);
 
+      
             var result = await _context.SaveChangesAsync() > 0;
 
             if (result) return Ok(product);

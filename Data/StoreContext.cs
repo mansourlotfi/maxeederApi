@@ -12,6 +12,7 @@ namespace ecommerceApi.Data
         }
 
         public DbSet<Product> Products { get; set; }
+        public DbSet<Feature> Features { get; set; }
         public DbSet<Basket> Baskets { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Category> Categories { get; set; }
@@ -44,6 +45,17 @@ namespace ecommerceApi.Data
                .WithOne()
                .HasForeignKey<UserAddress>(a => a.Id)
                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<ProductFeature>()
+                .HasKey(pf => new { pf.ProductId, pf.FeatureId });
+            builder.Entity<ProductFeature>()
+                .HasOne(pf => pf.Product)
+                .WithMany(pf=>pf.Features)
+                .HasForeignKey(pf=>pf.ProductId);
+            builder.Entity<ProductFeature>()
+                .HasOne(pf => pf.Feature)
+                .WithMany(pf => pf.Products)
+                .HasForeignKey(pf => pf.FeatureId);
 
             builder.Entity<SocialNetwork>().HasIndex(u => u.Priority).IsUnique();
             builder.Entity<MainMenu>().HasIndex(u => u.Priority).IsUnique();

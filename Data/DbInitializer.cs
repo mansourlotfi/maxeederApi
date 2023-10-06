@@ -96,7 +96,8 @@ namespace ecommerceApi.Data
                     Brand = "برند 1",
                     Type = "دسته بندی 1",
                     QuantityInStock = 100,
-                    IsFeatured=false
+                    IsFeatured=false,
+                    
                     
                 },
                 new Product

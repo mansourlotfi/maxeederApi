@@ -17,6 +17,10 @@ IWebHostEnvironment environment = builder.Environment;
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddControllersWithViews()
+    .AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+);
 builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 builder.Services.AddEndpointsApiExplorer();
 
