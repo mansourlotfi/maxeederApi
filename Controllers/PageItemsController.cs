@@ -36,6 +36,7 @@ namespace ecommerceApi.Controllers
                 PictureUrl = String.Format("{0}://{1}{2}/Images/{3}", Request.Scheme, Request.Host, Request.PathBase, x.PictureUrl),
                 Priority = x.Priority,
                 Page = x.Page,
+                RitchText=x.RitchText,
             }).AsQueryable();
 
             var items = await PagedList<PageItem>.ToPagedList(query, pageItemParams.PageNumber, pageItemParams.PageSize);
@@ -68,6 +69,33 @@ namespace ecommerceApi.Controllers
                 pageItem.PictureUrl = fileName;
 
             }
+
+            //if (_hostEnvironment.IsDevelopment())
+            //{
+            //    bool exists = System.IO.Directory.Exists("..\\var\\lib\\Upload\\RTF");
+            //    if (!exists)
+            //        System.IO.Directory.CreateDirectory("..\\var\\lib\\Upload\\RTF");
+            //    var ContactUsPath = "..\\var\\lib\\Upload\\RTF\\ContactUsRitchText.txt";
+            //    System.IO.File.WriteAllText(ContactUsPath, String.Empty);
+            //    using StreamWriter swc = new StreamWriter(ContactUsPath);
+            //    swc.Write(createPageItemDto.RitchText);
+            //    swc.Close();
+
+            //}
+            //else
+            //{
+            //    bool exists = System.IO.Directory.Exists("..//var//lib//Upload//RTF");
+            //    if (!exists)
+            //        System.IO.Directory.CreateDirectory("..//var//lib//Upload//RTF");
+
+            //    var ContactUsPath = "..//var//lib//Upload//RTF//ContactUsRitchText.txt";
+            //    System.IO.File.WriteAllText(ContactUsPath, String.Empty);
+            //    using StreamWriter swc = new StreamWriter(ContactUsPath);
+            //    swc.Write(createPageItemDto.RitchText);
+            //    swc.Close();
+
+
+            //}
 
             _context.PageItems.Add(pageItem);
 

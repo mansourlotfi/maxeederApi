@@ -13,6 +13,8 @@ namespace ecommerceApi.DTOs
         public IFormFile? File { get; set; }
         [Required]
         public int Priority { get; set; }
+        public string? RitchText { get; set; }
+
         [Required]
         public PageItemsEnum Page { get; set; }
     }

@@ -23,6 +23,7 @@
         public string? Link { get; set; }
         public string? PictureUrl { get; set; }
         public int Priority { get; set; }
+        public string? RitchText { get; set; }
         public PageItemsEnum Page { get; set; }
 
     }

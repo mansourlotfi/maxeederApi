@@ -535,6 +535,9 @@ namespace ecommerceApi.Data.Migrations
                     b.Property<int>("Priority")
                         .HasColumnType("int");
 
+                    b.Property<string>("RitchText")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Text")
                         .HasColumnType("nvarchar(max)");
 
@@ -697,14 +700,14 @@ namespace ecommerceApi.Data.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "fa48df40-0a1a-4d02-a14d-8dcf75e4e881",
+                            ConcurrencyStamp = "8ed4eb34-26c9-4bd8-be8a-78b70026bc5c",
                             Name = "Member",
                             NormalizedName = "MEMBER"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "8d12eea3-ed45-4d67-8aad-91d1c88134e2",
+                            ConcurrencyStamp = "932dda84-711e-48cf-bd6a-4a2a2e2d69f4",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });

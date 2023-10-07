@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ecommerceApi.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class ProductFeatureManyToMany : Migration
+    public partial class pageItemEntityRitchText : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -258,6 +258,7 @@ namespace ecommerceApi.Data.Migrations
                     Link = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PictureUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
+                    RitchText = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Page = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -599,8 +600,8 @@ namespace ecommerceApi.Data.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, "fa48df40-0a1a-4d02-a14d-8dcf75e4e881", "Member", "MEMBER" },
-                    { 2, "8d12eea3-ed45-4d67-8aad-91d1c88134e2", "Admin", "ADMIN" }
+                    { 1, "8ed4eb34-26c9-4bd8-be8a-78b70026bc5c", "Member", "MEMBER" },
+                    { 2, "932dda84-711e-48cf-bd6a-4a2a2e2d69f4", "Admin", "ADMIN" }
                 });
 
             migrationBuilder.CreateIndex(
