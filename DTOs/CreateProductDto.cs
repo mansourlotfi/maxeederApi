@@ -29,6 +29,7 @@ namespace ecommerceApi.DTOs
 
         public bool? IsFeatured { get; set; } = false;
         public List<int>? Features { get; set; } = new List<int>();
+        public bool? IsActive { get; set; } = true;
 
     }
 }

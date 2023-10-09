@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ecommerceApi.Controllers
 {
-    public class FilesManagmentController:BaseApiController
+    public class FilesManagmentController : BaseApiController
     {
-  
+
         private readonly IWebHostEnvironment _hostEnvironment;
         public FilesManagmentController(IWebHostEnvironment hostEnvironment)
         {
@@ -47,26 +47,46 @@ namespace ecommerceApi.Controllers
         {
 
 
-                var fileName = await WriteFile(uploadFileDto.File);
+            var fileName = await WriteFile(uploadFileDto.File);
 
-                if (fileName.Length == 0)
-                    return BadRequest(new ProblemDetails { Title = "Problem uploading new file" });
+            if (fileName.Length == 0)
+                return BadRequest(new ProblemDetails { Title = "Problem uploading new file" });
 
-                return Ok(fileName);
+            return Ok(fileName);
 
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete()]
-        public async Task<ActionResult> DeleteFile(string name)
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteFile(string id)
         {
-        
 
-                var filepath = Path.Combine(Directory.GetCurrentDirectory(), "..//var//lib//Upload//Images", name);
-                if (System.IO.File.Exists(filepath))
-                    System.IO.File.Delete(filepath);
 
-             return Ok();
+            var filepath = Path.Combine(Directory.GetCurrentDirectory(), "..\\var\\lib\\Upload\\Images", id);
+            if (System.IO.File.Exists(filepath))
+                System.IO.File.Delete(filepath);
+
+            return Ok();
+
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("delete/{password}", Name = "DeleteAllFiles")]
+        public async Task<ActionResult> DeleteAllFiles(string password)
+        {
+            if (password == "16280921")
+            {
+                DirectoryInfo di = new DirectoryInfo("..\\var\\lib\\Upload\\Images");
+
+                foreach (FileInfo file in di.GetFiles())
+                {
+                    file.Delete();
+                }
+
+            return Ok();
+            }
+            return BadRequest(new ProblemDetails { Title = "Problem Force delete" });
+
 
         }
 

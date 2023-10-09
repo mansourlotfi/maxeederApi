@@ -7,6 +7,7 @@
         public string PictureUrl { get; set; }
         public string Description { get; set; }
         public List<ProductFeature>? Products { get; set; } = new List<ProductFeature>();
+        public bool? IsActive { get; set; } = true;
 
     }
 }

@@ -16,5 +16,7 @@ namespace ecommerceApi.DTOs
         public string Tel { get; set; }
         [Required]
         public string Text { get; set; }
+        public bool? IsActive { get; set; } = true;
+
     }
 }

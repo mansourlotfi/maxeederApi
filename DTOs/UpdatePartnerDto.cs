@@ -13,5 +13,7 @@ namespace ecommerceApi.DTOs
         public string? Tel { get; set; }
         public string? Long { get; set; }
         public string? Lat { get; set; }
+        public bool? IsActive { get; set; } = true;
+
     }
 }

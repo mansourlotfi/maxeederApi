@@ -37,6 +37,7 @@ namespace ecommerceApi.Controllers
                 Priority = x.Priority,
                 Page = x.Page,
                 RitchText=x.RitchText,
+                IsActive=x.IsActive,
             }).AsQueryable();
 
             var items = await PagedList<PageItem>.ToPagedList(query, pageItemParams.PageNumber, pageItemParams.PageSize);
@@ -168,6 +169,65 @@ namespace ecommerceApi.Controllers
             if (result) return Ok();
 
             return BadRequest(new ProblemDetails { Title = "Problem deleting item" });
+        }
+
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut("UpdateMultipleItems")]
+        public async Task<ActionResult> UpdatePageItemsList([FromBody] List<int> ids)
+        {
+
+            if (ids == null || ids.Count == 0) return NotFound();
+
+            foreach (var id in ids)
+            {
+                var item = await _context.PageItems.FindAsync(id);
+
+                if (item == null) return NotFound();
+
+                item.IsActive = !item.IsActive;
+
+            }
+
+            var result = await _context.SaveChangesAsync() > 0;
+
+            if (result) return Ok();
+
+            return BadRequest(new ProblemDetails { Title = "Problem updating PageItems" });
+        }
+
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("DeleteMultipleItems")]
+        public async Task<ActionResult> DeletePageItemsList([FromBody] List<int> ids)
+        {
+
+            if (ids == null || ids.Count == 0) return NotFound();
+
+            foreach (var id in ids)
+            {
+
+                var item = await _context.PageItems.FindAsync(id);
+
+                if (item == null) return NotFound();
+
+                if (!string.IsNullOrEmpty(item.PictureUrl))
+                {
+
+                    var filepath = Path.Combine(Directory.GetCurrentDirectory(), "..//var//lib//Upload//Images", item.PictureUrl);
+                    if (System.IO.File.Exists(filepath))
+                        System.IO.File.Delete(filepath);
+                }
+
+                _context.PageItems.Remove(item);
+            }
+
+
+            var result = await _context.SaveChangesAsync() > 0;
+
+            if (result) return Ok();
+
+            return BadRequest(new ProblemDetails { Title = "Problem deleting Page Items" });
         }
 
         private async Task<string> WriteFile(IFormFile file)

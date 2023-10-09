@@ -31,6 +31,7 @@ namespace ecommerceApi.Controllers
                 Title = x.Title,
                 Link = x.Link,
                 Priority = x.Priority,
+                IsActive=x.IsActive,    
             }).AsQueryable();
 
             var menu = await PagedList<MainMenu>.ToPagedList(query, paginationParams.PageNumber, paginationParams.PageSize);
@@ -96,6 +97,57 @@ namespace ecommerceApi.Controllers
             if (result) return Ok();
 
             return BadRequest(new ProblemDetails { Title = "Problem deleting main menu items" });
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut("UpdateMultipleItems")]
+        public async Task<ActionResult> UpdateMenus([FromBody] List<int> ids)
+        {
+
+            if (ids == null || ids.Count == 0) return NotFound();
+
+            foreach (var id in ids)
+            {
+                var item = await _context.MainMenuItems.FindAsync(id);
+
+                if (item == null) return NotFound();
+
+                item.IsActive = !item.IsActive;
+
+            }
+
+            var result = await _context.SaveChangesAsync() > 0;
+
+            if (result) return Ok();
+
+            return BadRequest(new ProblemDetails { Title = "Problem updating Main Menu" });
+        }
+
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("DeleteMultipleItems")]
+        public async Task<ActionResult> DeleteMainMenus([FromBody] List<int> ids)
+        {
+
+            if (ids == null || ids.Count == 0) return NotFound();
+
+            foreach (var id in ids)
+            {
+
+                var item = await _context.MainMenuItems.FindAsync(id);
+
+                if (item == null) return NotFound();
+
+
+                _context.MainMenuItems.Remove(item);
+            }
+
+
+            var result = await _context.SaveChangesAsync() > 0;
+
+            if (result) return Ok();
+
+            return BadRequest(new ProblemDetails { Title = "Problem deleting Main Menus" });
         }
 
     }

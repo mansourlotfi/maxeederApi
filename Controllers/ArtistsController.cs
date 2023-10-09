@@ -33,6 +33,7 @@ namespace ecommerceApi.Controllers
                 Text = x.Text,
                 PictureUrl = String.Format("{0}://{1}{2}/Images/{3}", Request.Scheme, Request.Host, Request.PathBase, x.PictureUrl),
                 Priority = x.Priority,
+                IsActive=x.IsActive,
             }).AsQueryable();
 
             var artist = await PagedList<Artist>.ToPagedList(query, paginationParams.PageNumber, paginationParams.PageSize);
@@ -136,6 +137,64 @@ namespace ecommerceApi.Controllers
             if (result) return Ok();
 
             return BadRequest(new ProblemDetails { Title = "Problem deleting artist" });
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut("UpdateMultipleItems")]
+        public async Task<ActionResult> UpdateArtists([FromBody] List<int> ids)
+        {
+
+            if (ids == null || ids.Count == 0) return NotFound();
+
+            foreach (var id in ids)
+            {
+                var item = await _context.Artists.FindAsync(id);
+
+                if (item == null) return NotFound();
+
+                item.IsActive = !item.IsActive;
+
+            }
+
+            var result = await _context.SaveChangesAsync() > 0;
+
+            if (result) return Ok();
+
+            return BadRequest(new ProblemDetails { Title = "Problem updating Artists" });
+        }
+
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("DeleteMultipleItems")]
+        public async Task<ActionResult> DeleteArtists([FromBody] List<int> ids)
+        {
+
+            if (ids == null || ids.Count == 0) return NotFound();
+
+            foreach (var id in ids)
+            {
+
+                var item = await _context.Artists.FindAsync(id);
+
+                if (item == null) return NotFound();
+
+                if (!string.IsNullOrEmpty(item.PictureUrl))
+                {
+
+                    var filepath = Path.Combine(Directory.GetCurrentDirectory(), "..//var//lib//Upload//Images", item.PictureUrl);
+                    if (System.IO.File.Exists(filepath))
+                        System.IO.File.Delete(filepath);
+                }
+
+                _context.Artists.Remove(item);
+            }
+
+
+            var result = await _context.SaveChangesAsync() > 0;
+
+            if (result) return Ok();
+
+            return BadRequest(new ProblemDetails { Title = "Problem deleting Artists" });
         }
 
 

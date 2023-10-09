@@ -40,6 +40,7 @@ namespace ecommerceApi.Controllers
                 IsFeatured = x.IsFeatured,
                 PictureUrl = String.Format("{0}://{1}{2}/Images/{3}",Request.Scheme,Request.Host,Request.PathBase, x.PictureUrl) ,
                 Features=x.Features,
+                IsActive = x.IsActive,
             })
             .Sort(productParams.OrderBy)
             .Search(productParams.SearchTerm)
@@ -71,6 +72,7 @@ namespace ecommerceApi.Controllers
                 IsFeatured = x.IsFeatured,
                 PictureUrl = String.Format("{0}://{1}{2}/Images/{3}", Request.Scheme, Request.Host, Request.PathBase, x.PictureUrl),
                 Features=x.Features,
+                IsActive=x.IsActive,
             }).AsQueryable();
 
             var products = await PagedList<Product>.ToPagedList(query, 1, 10);
@@ -222,6 +224,65 @@ namespace ecommerceApi.Controllers
             if (result) return Ok();
 
             return BadRequest(new ProblemDetails { Title = "Problem deleting product" });
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut("UpdateMultipleItems")]
+        public async Task<ActionResult> UpdateProducts([FromBody] List<int> ids)
+        {
+
+            if (ids == null || ids.Count == 0) return NotFound();
+
+            foreach (var id in ids)
+            {
+                var product = await _context.Products.FindAsync(id);
+
+                if (product == null) return NotFound();
+
+                product.IsActive = !product.IsActive;
+
+            }
+
+            var result = await _context.SaveChangesAsync() > 0;
+
+            if (result) return Ok();
+
+            return BadRequest(new ProblemDetails { Title = "Problem updating products" });
+        }
+
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("DeleteMultipleItems")]
+        public async Task<ActionResult> DeleteProducts([FromBody] List<int> ids)
+        {
+
+            if (ids == null || ids.Count == 0) return NotFound();
+
+            foreach (var id in ids)
+            {
+
+            var product = await _context.Products.FindAsync(id);
+
+            if (product == null) return NotFound();
+
+            if (!string.IsNullOrEmpty(product.PictureUrl))
+            {
+
+                var filepath = Path.Combine(Directory.GetCurrentDirectory(), "..//var//lib//Upload//Images", product.PictureUrl);
+                if (System.IO.File.Exists(filepath))
+                    System.IO.File.Delete(filepath);
+            }
+
+
+            _context.Products.Remove(product);
+            }
+
+
+            var result = await _context.SaveChangesAsync() > 0;
+
+            if (result) return Ok();
+
+            return BadRequest(new ProblemDetails { Title = "Problem deleting products" });
         }
 
         private async Task<string> WriteFile(IFormFile file)

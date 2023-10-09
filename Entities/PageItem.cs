@@ -25,6 +25,8 @@
         public int Priority { get; set; }
         public string? RitchText { get; set; }
         public PageItemsEnum Page { get; set; }
+        public bool? IsActive { get; set; } = true;
+
 
     }
 }

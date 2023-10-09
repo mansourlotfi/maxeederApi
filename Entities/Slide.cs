@@ -20,6 +20,8 @@
         public string PictureUrl { get; set; }
         public int Priority { get; set; }
         public PagesEnum Page { get; set; }
+        public bool? IsActive { get; set; } = true;
+
 
     }
 }

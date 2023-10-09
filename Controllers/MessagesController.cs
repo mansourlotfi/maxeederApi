@@ -37,6 +37,7 @@ namespace ecommerceApi.Controllers
                 Tel=x.Tel,
                 Text = x.Text,
                 AddedDate=x.AddedDate,
+                IsActive=x.IsActive,
             }).AsQueryable();
 
             var meessages = await PagedList<Message>.ToPagedList(query, paginationParams.PageNumber, paginationParams.PageSize);
@@ -80,6 +81,56 @@ namespace ecommerceApi.Controllers
             if (result) return Ok();
 
             return BadRequest(new ProblemDetails { Title = "Problem deleting message" });
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut("UpdateMultipleItems")]
+        public async Task<ActionResult> UpdateMessagesList([FromBody] List<int> ids)
+        {
+
+            if (ids == null || ids.Count == 0) return NotFound();
+
+            foreach (var id in ids)
+            {
+                var item = await _context.Messages.FindAsync(id);
+
+                if (item == null) return NotFound();
+
+                item.IsActive = !item.IsActive;
+
+            }
+
+            var result = await _context.SaveChangesAsync() > 0;
+
+            if (result) return Ok();
+
+            return BadRequest(new ProblemDetails { Title = "Problem updating Messages" });
+        }
+
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("DeleteMultipleItems")]
+        public async Task<ActionResult> DeleteMessageslist([FromBody] List<int> ids)
+        {
+
+            if (ids == null || ids.Count == 0) return NotFound();
+
+            foreach (var id in ids)
+            {
+
+                var item = await _context.Messages.FindAsync(id);
+
+                if (item == null) return NotFound();
+
+                _context.Messages.Remove(item);
+            }
+
+
+            var result = await _context.SaveChangesAsync() > 0;
+
+            if (result) return Ok();
+
+            return BadRequest(new ProblemDetails { Title = "Problem deleting Messages" });
         }
     }
 }

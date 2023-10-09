@@ -12,6 +12,7 @@
         public int QuantityInStock { get; set; }
         public bool? IsFeatured { get; set; } = false;
         public List<ProductFeature>? Features { get; set; } = new List<ProductFeature>();
+        public bool? IsActive { get; set; } = true;
     }
 }
 

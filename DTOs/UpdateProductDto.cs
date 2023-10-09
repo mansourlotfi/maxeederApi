@@ -27,7 +27,9 @@ namespace ecommerceApi.DTOs
         [Required]
         [Range(0, 200)]
         public int QuantityInStock { get; set; }
+        public bool? IsFeatured { get; set; } = false;
         public List<int>? Features { get; set; } = new List<int>();
+        public bool? IsActive { get; set; } = true;
 
     }
 }

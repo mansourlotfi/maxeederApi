@@ -10,5 +10,7 @@ namespace ecommerceApi.DTOs
         public string Link { get; set; }
         [Required]
         public int Priority { get; set; }
+        public bool? IsActive { get; set; } = true;
+
     }
 }

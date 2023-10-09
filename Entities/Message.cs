@@ -10,6 +10,8 @@
         public string Tel { get; set; }
         public string Text { get; set; }
         public DateTime AddedDate { set; get; }
+        public bool? IsActive { get; set; } = true;
+
 
     }
 }

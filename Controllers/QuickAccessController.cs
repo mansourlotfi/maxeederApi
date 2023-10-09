@@ -32,6 +32,7 @@ namespace ecommerceApi.Controllers
                 Title = x.Title,
                 Link = x.Link,
                 Priority = x.Priority,
+                IsActive=x.IsActive,    
             }).AsQueryable();
 
             var menu = await PagedList<QuickAccess>.ToPagedList(query, paginationParams.PageNumber, paginationParams.PageSize);
@@ -96,6 +97,56 @@ namespace ecommerceApi.Controllers
             if (result) return Ok();
 
             return BadRequest(new ProblemDetails { Title = "Problem deleting QuickAccess item" });
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut("UpdateMultipleItems")]
+        public async Task<ActionResult> UpdateQuickAccessList([FromBody] List<int> ids)
+        {
+
+            if (ids == null || ids.Count == 0) return NotFound();
+
+            foreach (var id in ids)
+            {
+                var item = await _context.QuickAccess.FindAsync(id);
+
+                if (item == null) return NotFound();
+
+                item.IsActive = !item.IsActive;
+
+            }
+
+            var result = await _context.SaveChangesAsync() > 0;
+
+            if (result) return Ok();
+
+            return BadRequest(new ProblemDetails { Title = "Problem updating QuickAccess list" });
+        }
+
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("DeleteMultipleItems")]
+        public async Task<ActionResult> DeleteQuickAccessList([FromBody] List<int> ids)
+        {
+
+            if (ids == null || ids.Count == 0) return NotFound();
+
+            foreach (var id in ids)
+            {
+
+                var item = await _context.QuickAccess.FindAsync(id);
+
+                if (item == null) return NotFound();
+
+                _context.QuickAccess.Remove(item);
+            }
+
+
+            var result = await _context.SaveChangesAsync() > 0;
+
+            if (result) return Ok();
+
+            return BadRequest(new ProblemDetails { Title = "Problem deleting Quick Access list" });
         }
     }
 }
