@@ -171,7 +171,6 @@ if (environment.IsDevelopment())
 {
     app.UseCors(opt =>
     {
-        opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:3000");
         opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("https://maxeeder-admin.darkube.app");
         opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("https://*.darkube.app")
                 .SetIsOriginAllowedToAllowWildcardSubdomains(); ;
