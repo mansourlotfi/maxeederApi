@@ -31,6 +31,9 @@ namespace ecommerceApi.Data
         public DbSet<PageItem> PageItems { get; set; }
         public DbSet<Department> Departments { get; set; }
         public DbSet<Message> Messages { get; set; }
+        public DbSet<Article> Articles { get; set; }
+
+        
 
 
 
@@ -63,6 +66,8 @@ namespace ecommerceApi.Data
             builder.Entity<Logo>().HasIndex(u => u.Priority).IsUnique();
             builder.Entity<Category>().HasIndex(u => u.Priority).IsUnique();
             builder.Entity<Slide>().HasIndex(u => u.Priority).IsUnique();
+            builder.Entity<Article>().HasIndex(u => u.Priority).IsUnique();
+
 
             //builder.Entity<Setting>().Property(p => p.Id).ValueGeneratedNever();
 
