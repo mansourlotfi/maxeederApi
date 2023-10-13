@@ -34,6 +34,8 @@ namespace ecommerceApi.Controllers
                 PictureUrl = String.Format("{0}://{1}{2}/Images/{3}", Request.Scheme, Request.Host, Request.PathBase, x.PictureUrl),
                 Priority = x.Priority,
                 IsActive=x.IsActive,
+                NameEn=x.NameEn,
+                TextEn=x.TextEn,
             }).AsQueryable();
 
             var artist = await PagedList<Artist>.ToPagedList(query, paginationParams.PageNumber, paginationParams.PageSize);

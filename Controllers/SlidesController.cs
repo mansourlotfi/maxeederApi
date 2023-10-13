@@ -35,6 +35,7 @@ namespace ecommerceApi.Controllers
                 Priority = x.Priority,
                 Page=x.Page,
                 IsActive=x.IsActive,
+                NameEn=x.NameEn,
             }).AsQueryable();
 
             var slides = await PagedList<Slide>.ToPagedList(query, slideParams.PageNumber, slideParams.PageSize);

@@ -33,6 +33,7 @@ namespace ecommerceApi.Controllers
                 Link = x.Link,
                 Priority = x.Priority,
                 IsActive=x.IsActive,    
+                TitleEn=x.TitleEn, 
             }).AsQueryable();
 
             var menu = await PagedList<QuickAccess>.ToPagedList(query, paginationParams.PageNumber, paginationParams.PageSize);

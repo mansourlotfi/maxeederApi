@@ -17,6 +17,7 @@ namespace ecommerceApi.DTOs
         [Required]
         public PagesEnum Page { get; set; }
         public bool? IsActive { get; set; } = true;
+        public string? NameEn { get; set; }
 
     }
 }

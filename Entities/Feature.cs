@@ -8,6 +8,7 @@
         public string Description { get; set; }
         public List<ProductFeature>? Products { get; set; } = new List<ProductFeature>();
         public bool? IsActive { get; set; } = true;
-
+        public string? NameEn { get; set; }
+        public string? DescriptionEn { get; set; }
     }
 }

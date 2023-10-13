@@ -10,7 +10,8 @@ namespace ecommerceApi.DTOs
         public IFormFile File { get; set; }
         public string Description { get; set; }
         public bool? IsActive { get; set; } = true;
-
+        public string? NameEn { get; set; }
+        public string? DescriptionEn { get; set; }
 
     }
 }

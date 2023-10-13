@@ -7,7 +7,7 @@
         public string Link { get; set; }
         public int Priority { get; set; }
         public bool? IsActive { get; set; } = true;
-
+        public string? TitleEn { get; set; }
 
     }
 }

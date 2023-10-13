@@ -31,6 +31,8 @@ namespace ecommerceApi.Controllers
                 Description = x.Description,
                 IsActive = x.IsActive,
                 Products=x.Products,
+                NameEn=x.NameEn,
+                DescriptionEn=x.DescriptionEn,
             }).ToListAsync();
 
             if (features == null) return NotFound();

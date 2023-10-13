@@ -35,6 +35,10 @@ namespace ecommerceApi.Controllers
                 Long=x.Long,
                 Lat=x.Lat,
                 IsActive=x.IsActive,
+                TitleEn=x.TitleEn,
+                CeoEn=x.CeoEn,
+                CityEn=x.CityEn,
+                StateEn=x.StateEn,
             })
             .Search(partnerParams.SearchTerm)
             .AsQueryable();

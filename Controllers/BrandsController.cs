@@ -30,7 +30,8 @@ namespace ecommerceApi.Controllers
                 Id = x.Id,
                 Name = x.Name,
                 PictureUrl = String.Format("{0}://{1}{2}/Images/{3}", Request.Scheme, Request.Host, Request.PathBase, x.PictureUrl),
-                IsActive=x.IsActive,    
+                IsActive=x.IsActive,  
+                NameEn=x.NameEn,
             }).ToListAsync();
 
             if (brands == null) return NotFound();

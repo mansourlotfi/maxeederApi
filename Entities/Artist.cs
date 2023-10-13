@@ -8,6 +8,7 @@
         public string PictureUrl { get; set; }
         public int Priority { get; set; }
         public bool? IsActive { get; set; } = true;
-
+        public string? NameEn { get; set; }
+        public string? TextEn { get; set; }
     }
 }
