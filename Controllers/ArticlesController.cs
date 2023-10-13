@@ -48,6 +48,20 @@ namespace ecommerceApi.Controllers
 
         }
 
+        [HttpGet("{id}", Name = "GetArticle")]
+        public async Task<ActionResult<Article>> GetProduct(int id)
+        {
+            var article = await _context.Articles.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (article == null) return NotFound();
+
+            article.PictureUrl = String.Format("{0}://{1}{2}/Images/{3}", Request.Scheme, Request.Host, Request.PathBase, article.PictureUrl);
+
+
+            return article;
+
+        }
+
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<Article>> CreateArticle([FromForm] CreateArticleDto createArticleDto)

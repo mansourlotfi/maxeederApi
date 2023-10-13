@@ -88,6 +88,8 @@ namespace ecommerceApi.Controllers
 
             if (product == null) return NotFound();
 
+            product.PictureUrl = String.Format("{0}://{1}{2}/Images/{3}", Request.Scheme, Request.Host, Request.PathBase, product.PictureUrl);
+
             return product;
 
         }
