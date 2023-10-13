@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ecommerceApi.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace ecommerceApi.DTOs
 {
@@ -30,6 +31,11 @@ namespace ecommerceApi.DTOs
         public bool? IsFeatured { get; set; } = false;
         public List<int>? Features { get; set; } = new List<int>();
         public bool? IsActive { get; set; } = true;
+        [Required]
+        public ProductUsage Usage { get; set; }
+        public string? Size { get; set; }
+        public string? NameEn { get; set; }
+        public string? DescriptionEn { get; set; }
 
     }
 }

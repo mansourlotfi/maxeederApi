@@ -41,10 +41,14 @@ namespace ecommerceApi.Controllers
                 PictureUrl = String.Format("{0}://{1}{2}/Images/{3}",Request.Scheme,Request.Host,Request.PathBase, x.PictureUrl) ,
                 Features=x.Features,
                 IsActive = x.IsActive,
+                Size = x.Size,
+                DescriptionEn=x.DescriptionEn,
+                NameEn=x.NameEn,
+                Usage=x.Usage,
             })
             .Sort(productParams.OrderBy)
             .Search(productParams.SearchTerm)
-            .Filter(productParams.Brands, productParams.Types)
+            .Filter(productParams.Brands, productParams.Types,productParams.Size)
             .AsQueryable();
 
             var products = await PagedList<Product>.ToPagedList(query, productParams.PageNumber, productParams.PageSize);
@@ -73,6 +77,10 @@ namespace ecommerceApi.Controllers
                 PictureUrl = String.Format("{0}://{1}{2}/Images/{3}", Request.Scheme, Request.Host, Request.PathBase, x.PictureUrl),
                 Features=x.Features,
                 IsActive=x.IsActive,
+                Size = x.Size,
+                DescriptionEn = x.DescriptionEn,
+                NameEn = x.NameEn,
+                Usage = x.Usage,
             }).AsQueryable();
 
             var products = await PagedList<Product>.ToPagedList(query, 1, 10);
