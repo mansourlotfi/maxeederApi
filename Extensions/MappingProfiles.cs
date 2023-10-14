@@ -38,6 +38,8 @@ namespace ecommerceApi.Extensions
             CreateMap<CreateArticleDto, Article>();
             CreateMap<UpdateArticleDto, Article>();
             CreateMap<CreateUsageDto, Usage>();
+            CreateMap<CreateSizeDto, Size>();
+
 
         }
     }

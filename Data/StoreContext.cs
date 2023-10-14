@@ -33,9 +33,11 @@ namespace ecommerceApi.Data
         public DbSet<Message> Messages { get; set; }
         public DbSet<Article> Articles { get; set; }
         public DbSet<Usage> Usages { get; set; }
+        public DbSet<Size> Sizes { get; set; }
 
 
-        
+
+
 
 
 
