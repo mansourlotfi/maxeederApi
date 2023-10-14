@@ -37,7 +37,7 @@ namespace ecommerceApi.Extensions
             CreateMap<CreateMessageDto, Message>();
             CreateMap<CreateArticleDto, Article>();
             CreateMap<UpdateArticleDto, Article>();
-
+            CreateMap<CreateUsageDto, Usage>();
 
         }
     }

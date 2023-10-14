@@ -32,6 +32,8 @@ namespace ecommerceApi.Data
         public DbSet<Department> Departments { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<Article> Articles { get; set; }
+        public DbSet<Usage> Usages { get; set; }
+
 
         
 
