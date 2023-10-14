@@ -5,14 +5,15 @@
     {
         ServiceMain = 1,
         ServiceItems,
-        MaxPlus,
-        WikiMax,
         ContactUs,
         AboutUsHeader,
         AboutUsHistory,
         AboutUsTestimonials,
         AboutUsWarranty,
-        AboutUsHonors
+        AboutUsHonors,
+        CoWorkersHead,
+        CoWorkersTabs,
+        CoWorkersWarranty,
     }
 
     public class PageItem

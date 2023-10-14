@@ -1,5 +1,11 @@
 ﻿namespace ecommerceApi.Entities
 {
+    public enum ArticlesEnum
+    {
+        WikiMax = 1,
+        MaxPlus,
+    
+    }
     public class Article
     {
         public int Id { get; set; }
@@ -11,5 +17,9 @@
         public bool? IsActive { get; set; } = true;
         public string? TitleEn { get; set; }
         public string? RitchTextEn { get; set; }
+        public ArticlesEnum Page { get; set; }
+        public DateTime AddedDate { set; get; }
+
+
     }
 }

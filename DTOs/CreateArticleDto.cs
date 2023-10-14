@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ecommerceApi.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace ecommerceApi.DTOs
 {
@@ -17,5 +18,8 @@ namespace ecommerceApi.DTOs
         public bool? IsActive { get; set; } = true;
         public string? TitleEn { get; set; }
         public string? RitchTextEn { get; set; }
+        [Required]
+        public ArticlesEnum Page { get; set; }
+
     }
 }

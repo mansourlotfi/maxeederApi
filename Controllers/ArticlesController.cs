@@ -24,10 +24,10 @@ namespace ecommerceApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<PagedList<Article>>> GetPageItems([FromQuery] PaginationParams? paginationParams)
+        public async Task<ActionResult<PagedList<Article>>> GetPageItems([FromQuery] ArticlesParams? articlesParams)
         {
             // return await _context.PageItems.ToListAsync();
-            var query = _context.Articles.Select(x => new Article()
+            var query = _context.Articles.Where(x => x.Page == articlesParams.Page).Select(x => new Article()
             {
                 Id = x.Id,
                 Title = x.Title,
@@ -38,9 +38,11 @@ namespace ecommerceApi.Controllers
                 IsActive = x.IsActive,
                 RitchTextEn=x.RitchTextEn,
                 TitleEn=x.TitleEn,
+                Page=x.Page,
+                AddedDate=x.AddedDate,
             }).AsQueryable();
 
-            var items = await PagedList<Article>.ToPagedList(query, paginationParams.PageNumber, paginationParams.PageSize);
+            var items = await PagedList<Article>.ToPagedList(query, articlesParams.PageNumber, articlesParams.PageSize);
 
             Response.AddPaginationHeader(items.MetaData);
 
@@ -57,7 +59,6 @@ namespace ecommerceApi.Controllers
 
             article.PictureUrl = String.Format("{0}://{1}{2}/Images/{3}", Request.Scheme, Request.Host, Request.PathBase, article.PictureUrl);
 
-
             return article;
 
         }
@@ -70,6 +71,7 @@ namespace ecommerceApi.Controllers
             if (existing != null) return BadRequest(new ProblemDetails { Title = "Item with this priority exist" });
 
             var article = _mapper.Map<Article>(createArticleDto);
+                article.AddedDate = DateTime.Now;
 
 
 
