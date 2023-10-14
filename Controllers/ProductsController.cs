@@ -107,8 +107,8 @@ namespace ecommerceApi.Controllers
         {
             var brands = await _context.Products.Select(p => p.Brand).Distinct().ToListAsync();
             var types = await _context.Products.Select(p => p.Type).Distinct().ToListAsync();
-
-            return Ok(new { brands, types });
+            var size = await _context.Products.Select(p => p.Size).Distinct().ToListAsync();
+            return Ok(new { brands, types, size });
 
         }
 
