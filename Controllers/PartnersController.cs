@@ -41,6 +41,7 @@ namespace ecommerceApi.Controllers
                 StateEn=x.StateEn,
             })
             .Search(partnerParams.SearchTerm)
+            .Filter(partnerParams.City)
             .AsQueryable();
 
             var partners = await PagedList<Partner>.ToPagedList(query, partnerParams.PageNumber, partnerParams.PageSize);
