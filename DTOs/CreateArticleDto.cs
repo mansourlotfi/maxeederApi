@@ -20,6 +20,8 @@ namespace ecommerceApi.DTOs
         public string? RitchTextEn { get; set; }
         [Required]
         public ArticlesEnum Page { get; set; }
+        public string? ShortDesc { get; set; }
+        public string? ShortDescEn { get; set; }
 
     }
 }

@@ -19,6 +19,8 @@
         public string? RitchTextEn { get; set; }
         public ArticlesEnum Page { get; set; }
         public DateTime AddedDate { set; get; }
+        public string? ShortDesc { get; set; }
+        public string? ShortDescEn { get; set; }
 
 
     }

@@ -25,6 +25,8 @@ namespace ecommerceApi.DTOs
         [Required]
 
         public ArticlesEnum Page { get; set; }
+        public string? ShortDesc { get; set; }
+        public string? ShortDescEn { get; set; }
 
     }
 }
