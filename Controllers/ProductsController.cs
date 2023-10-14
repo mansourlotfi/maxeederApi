@@ -48,7 +48,7 @@ namespace ecommerceApi.Controllers
             })
             .Sort(productParams.OrderBy)
             .Search(productParams.SearchTerm)
-            .Filter(productParams.Brands, productParams.Types,productParams.Size)
+            .Filter(productParams.Brands, productParams.Types,productParams.Size, productParams.Usage)
             .AsQueryable();
 
             var products = await PagedList<Product>.ToPagedList(query, productParams.PageNumber, productParams.PageSize);
@@ -108,7 +108,9 @@ namespace ecommerceApi.Controllers
             var brands = await _context.Products.Select(p => p.Brand).Distinct().ToListAsync();
             var types = await _context.Products.Select(p => p.Type).Distinct().ToListAsync();
             var size = await _context.Products.Select(p => p.Size).Distinct().ToListAsync();
-            return Ok(new { brands, types, size });
+            var usage = await _context.Products.Select(p => p.Usage).Distinct().ToListAsync();
+
+            return Ok(new { brands, types, size, usage });
 
         }
 

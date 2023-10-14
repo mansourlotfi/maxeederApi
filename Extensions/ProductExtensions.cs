@@ -25,11 +25,13 @@ namespace ecommerceApi.Extensions
             return query.Where(p => p.Name.ToLower().Contains(lowerCaseSearchTerm));
         }
 
-        public static IQueryable<Product> Filter(this IQueryable<Product> query, string? brands, string? types, string? size)
+        public static IQueryable<Product> Filter(this IQueryable<Product> query, string? brands, string? types, string? size,string? usage)
         {
             var brandList = new List<string>();
             var typeList = new List<string>();
             var sizeList = new List<string>();
+            var usageList = new List<string>();
+
 
             if (!string.IsNullOrEmpty(brands))
                 brandList.AddRange(brands.ToLower().Split(",").ToList());
@@ -41,9 +43,14 @@ namespace ecommerceApi.Extensions
             if (!string.IsNullOrEmpty(size))
                 sizeList.AddRange(size.ToLower().Split(",").ToList());
 
+            if (!string.IsNullOrEmpty(usage))
+                usageList.AddRange(usage.ToLower().Split(",").ToList());
+
             query = query.Where(p => brandList.Count == 0 || brandList.Contains(p.Brand.ToLower()));
             query = query.Where(p => typeList.Count == 0 || typeList.Contains(p.Type.ToLower()));
             query = query.Where(p => sizeList.Count == 0 || sizeList.Contains(p.Size.ToLower()));
+            query = query.Where(p => usageList.Count == 0 || usageList.Contains(p.Usage.ToLower()));
+
 
             return query;
 
