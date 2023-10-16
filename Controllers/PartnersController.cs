@@ -39,6 +39,8 @@ namespace ecommerceApi.Controllers
                 CeoEn=x.CeoEn,
                 CityEn=x.CityEn,
                 StateEn=x.StateEn,
+                Address=x.Address,
+                AddressEn=x.AddressEn,
             })
             .Search(partnerParams.SearchTerm)
             .Filter(partnerParams.State)

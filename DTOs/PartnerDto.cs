@@ -14,5 +14,7 @@
         public string? CeoEn { get; set; }
         public string? StateEn { get; set; }
         public string? CityEn { get; set; }
+        public string? Address { get; set; }
+        public string? AddressEn { get; set; }
     }
 }

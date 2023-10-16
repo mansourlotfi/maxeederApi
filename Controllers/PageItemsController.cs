@@ -38,6 +38,10 @@ namespace ecommerceApi.Controllers
                 Page = x.Page,
                 RitchText=x.RitchText,
                 IsActive=x.IsActive,
+                TitleEn=x.TitleEn,
+                TextEn=x.TextEn,
+                ShortDesc=x.ShortDescEn,
+                ShortDescEn=x.ShortDescEn,
             }).AsQueryable();
 
             var items = await PagedList<PageItem>.ToPagedList(query, pageItemParams.PageNumber, pageItemParams.PageSize);

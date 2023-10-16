@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ecommerceApi.Data;
 
@@ -11,9 +12,11 @@ using ecommerceApi.Data;
 namespace ecommerceApi.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    partial class StoreContextModelSnapshot : ModelSnapshot
+    [Migration("20231016090514_PageItemsEnProprty")]
+    partial class PageItemsEnProprty
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -674,12 +677,6 @@ namespace ecommerceApi.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("AddressEn")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("CEO")
                         .HasColumnType("nvarchar(max)");
 
@@ -859,14 +856,14 @@ namespace ecommerceApi.Data.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "8280372e-bea7-4d3b-a825-b8b81b2a165c",
+                            ConcurrencyStamp = "a132b6bc-23e0-4213-9897-370e267a91bb",
                             Name = "Member",
                             NormalizedName = "MEMBER"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "c2962529-f11e-4aad-a2d0-a630f2910d50",
+                            ConcurrencyStamp = "0f818c18-3e42-41e7-85de-a3059db6c8a7",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
