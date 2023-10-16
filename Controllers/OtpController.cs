@@ -21,7 +21,7 @@ namespace ecommerceApi.Controllers
             _userManager = userManager;
         }
 
-        [HttpPost("registerWithOtp")]
+        [HttpPost("Register")]
         public async Task<ActionResult> Register(RegisterOtpDto registerDto)
         {
             Random random = new Random();
@@ -43,6 +43,23 @@ namespace ecommerceApi.Controllers
                     return ValidationProblem();
                 }
                 await _userManager.AddToRoleAsync(user, "Member");
+            }
+            
+            return StatusCode(201);
+
+        }
+
+        [HttpPost("Login")]
+        public async Task<ActionResult> Login(RegisterOtpDto registerDto)
+        {
+            Random random = new Random();
+            string randomNumber = random.Next(1000000).ToString("D6");
+
+            var user = await _userManager.FindByNameAsync(registerDto.PhoneNumber);
+
+            if (user == null)
+            {
+                return Unauthorized();
             }
             else
             {
@@ -66,25 +83,25 @@ namespace ecommerceApi.Controllers
             request.AddParameter("receptor", registerDto.PhoneNumber);
             request.AddParameter("token", randomNumber.ToString());
             request.AddParameter("template", "Verify");
-   
+
 
             var response = await client.PostAsync(request);
 
 
             if (response != null)
             {
-              return StatusCode(201);
+                return StatusCode(201);
             };
 
 
 
-            return BadRequest("Problem creating order");
+            return BadRequest("Problem Login User with otp");
 
         }
 
 
-        [HttpPost("login")]
-        public async Task<ActionResult<UserDtoOtb>> Login(LoginOtpDto loginDto)
+        [HttpPost("Verify")]
+        public async Task<ActionResult<UserDtoOtb>> Verify(LoginOtpDto loginDto)
         {
 
             var user = await _userManager.FindByNameAsync(loginDto.PhoneNumber);
