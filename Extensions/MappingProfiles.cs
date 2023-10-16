@@ -8,8 +8,9 @@ namespace ecommerceApi.Extensions
     {
         public MappingProfiles()
         {
-            CreateMap<CreateProductDto, Product>().ForMember(dest => dest.Features, opt => opt.Ignore());
-            CreateMap<UpdateProductDto, Product>().ForMember(dest => dest.Features, opt => opt.Ignore());
+            CreateMap<CreateProductDto, Product>();
+            CreateMap<UpdateProductDto, Product>();
+            CreateMap<UpdateProductMediaDto, Product>();
             CreateMap<CreateFeatureDto, Feature>();
             CreateMap<CreateCategoryDto, Category>();
             CreateMap<UpdateCategoryDto, Category>();

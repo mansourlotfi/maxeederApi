@@ -43,7 +43,7 @@ namespace ecommerceApi.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<ActionResult<string>> CreateProduct([FromForm] UploadFileDto uploadFileDto)
+        public async Task<ActionResult<string>> CreateMedia([FromForm] UploadFileDto uploadFileDto)
         {
 
 
@@ -55,6 +55,7 @@ namespace ecommerceApi.Controllers
             return Ok(fileName);
 
         }
+
 
         [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]

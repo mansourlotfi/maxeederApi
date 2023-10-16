@@ -45,6 +45,11 @@ namespace ecommerceApi.Controllers
                 DescriptionEn=x.DescriptionEn,
                 NameEn=x.NameEn,
                 Usage=x.Usage,
+                MediaList = (List<Media>)x.MediaList.Select(M => new Media()
+                {
+                    Id = M.Id,
+                    MediaFileName = String.Format("{0}://{1}{2}/Images/{3}", Request.Scheme, Request.Host, Request.PathBase, M.MediaFileName) ,
+                }),
             })
             .Sort(productParams.OrderBy)
             .Search(productParams.SearchTerm)
@@ -81,6 +86,7 @@ namespace ecommerceApi.Controllers
                 DescriptionEn = x.DescriptionEn,
                 NameEn = x.NameEn,
                 Usage = x.Usage,
+               MediaList=x.MediaList
             }).AsQueryable();
 
             var products = await PagedList<Product>.ToPagedList(query, 1, 10);
@@ -210,6 +216,39 @@ namespace ecommerceApi.Controllers
             if (result) return Ok(product);
 
             return BadRequest(new ProblemDetails { Title = "Problem updating product" });
+        }
+
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut("UpdateProductMedia")]
+        public async Task<ActionResult> UpdateProductMedia([FromForm] UpdateProductMediaDto productDto)
+        {
+            var product = await _context.Products.Include(x => x.Features).ThenInclude(y => y.Feature).FirstOrDefaultAsync(x => x.Id == productDto.Id);
+
+
+            if (product == null) return NotFound();
+   
+            if (productDto.File != null)
+            {
+                var fileName = await WriteFile(productDto.File);
+
+                if (fileName.Length == 0)
+                    return BadRequest(new ProblemDetails { Title = "Problem uploading new image" });
+
+                product.MediaList.Add(new Media
+                {
+                    MediaFileName = fileName
+                });
+
+            }
+
+            _mapper.Map(productDto, product);
+
+            var result = await _context.SaveChangesAsync() > 0;
+
+            if (result) return Ok(product);
+
+            return BadRequest(new ProblemDetails { Title = "Problem updating product media" });
         }
 
         [Authorize(Roles = "Admin")]
