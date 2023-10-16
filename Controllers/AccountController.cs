@@ -94,8 +94,8 @@ namespace ecommerceApi.Controllers
             var query = _context.Users.Select(x => new UserListDto()
             {
                 Id = x.Id,
+                PhoneNumber=x.PhoneNumber,
                 Email=x.Email,
-                CustomUserRoles=x.CustomUserRoles,
                 IsActive=x.IsActive??false
 
             })

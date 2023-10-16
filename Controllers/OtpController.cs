@@ -24,6 +24,21 @@ namespace ecommerceApi.Controllers
         [HttpPost("Register")]
         public async Task<ActionResult> Register(RegisterOtpDto registerDto)
         {
+            bool IsAllDigits(string s)
+            {
+                foreach (char c in s)
+                {
+                    if (!char.IsDigit(c))
+                        return false;
+                }
+                return true;
+            }
+
+            if (!IsAllDigits(registerDto.PhoneNumber))
+            {
+                return BadRequest("Problem Register User with otp");
+            }
+
             Random random = new Random();
             string randomNumber = random.Next(1000000).ToString("D6");
 
@@ -63,6 +78,8 @@ namespace ecommerceApi.Controllers
             }
             else
             {
+                await _userManager.RemovePasswordAsync(user);
+
                 await _userManager.AddPasswordAsync(user, randomNumber);
 
             }

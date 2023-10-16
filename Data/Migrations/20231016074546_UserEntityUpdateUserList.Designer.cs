@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ecommerceApi.Data;
 
@@ -11,9 +12,11 @@ using ecommerceApi.Data;
 namespace ecommerceApi.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    partial class StoreContextModelSnapshot : ModelSnapshot
+    [Migration("20231016074546_UserEntityUpdateUserList")]
+    partial class UserEntityUpdateUserList
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -841,14 +844,14 @@ namespace ecommerceApi.Data.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "3ec0b663-1cfd-4167-83d7-ba2315945438",
+                            ConcurrencyStamp = "cf2d37ac-2c1c-43d7-8dd3-e91e66c441f8",
                             Name = "Member",
                             NormalizedName = "MEMBER"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "92728c89-abf6-4c91-aeab-5e4a59f0aecf",
+                            ConcurrencyStamp = "ebc6f6ae-8e0d-4788-a729-952dc376b46d",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });

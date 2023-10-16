@@ -6,7 +6,6 @@ namespace ecommerceApi.Entities
     {
         public UserAddress Address { get; set; }
 
-        public List<CustomUserRole>? CustomUserRoles { get; set; } = new();
         public bool? IsActive { get; set; } = true;
     }
 }

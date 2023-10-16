@@ -13,7 +13,9 @@ namespace ecommerceApi.Data
                 var user = new User
                 {
                     UserName = "user",
-                    Email = "user@test.com"
+                    Email = "user@test.com",
+                    PhoneNumber="091222"
+
                 };
                 await userManager.CreateAsync(user, "Pa$$w0rd");
                 await userManager.AddToRoleAsync(user, "Member");
