@@ -10,11 +10,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ecommerceApi.Controllers
 {
-    public class CeoOptimizationController:BaseApiController
+    public class SeoOptimizationController:BaseApiController
     {
             private readonly StoreContext _context;
             private readonly IMapper _mapper;
-        public CeoOptimizationController(StoreContext context, IMapper mapper)
+        public SeoOptimizationController(StoreContext context, IMapper mapper)
         {
             _mapper = mapper;
             _context = context;
@@ -23,12 +23,12 @@ namespace ecommerceApi.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<PagedList<CeoOptimization>>> GetPageItems([FromQuery] CeoOptParams? ceoOptParams)
+        public async Task<ActionResult<PagedList<SeoOptimization>>> GetPageItems([FromQuery] SeoOptParams? ceoOptParams)
         {
             // return await _context.PageItems.ToListAsync();
             var query = _context.CeoOptimizations.Where(x => x.Page == ceoOptParams.Page).AsQueryable();
 
-            var items = await PagedList<CeoOptimization>.ToPagedList(query, ceoOptParams.PageNumber, ceoOptParams.PageSize);
+            var items = await PagedList<SeoOptimization>.ToPagedList(query, ceoOptParams.PageNumber, ceoOptParams.PageSize);
 
             Response.AddPaginationHeader(items.MetaData);
 
@@ -39,12 +39,12 @@ namespace ecommerceApi.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<ActionResult<CeoOptimization>>  CreateCeoOptimization([FromQuery] CeoOptimizationDto ceoOptimizationDto)
+        public async Task<ActionResult<SeoOptimization>>  CreateCeoOptimization([FromQuery] SeoOptimizationDto ceoOptimizationDto)
         {
             var existing = await _context.CeoOptimizations.FirstOrDefaultAsync(x => x.Priority == ceoOptimizationDto.Priority);
             if (existing != null) return BadRequest(new ProblemDetails { Title = "Item with this priority exist" });
 
-            var item = _mapper.Map<CeoOptimization>(ceoOptimizationDto);
+            var item = _mapper.Map<SeoOptimization>(ceoOptimizationDto);
 
             
             _context.CeoOptimizations.Add(item);
@@ -59,7 +59,7 @@ namespace ecommerceApi.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPut]
-        public async Task<ActionResult<CeoOptimization>> UpdateCeoItem([FromForm] UpdateCeoOptimizationDto updateCeoOptimizationDto)
+        public async Task<ActionResult<SeoOptimization>> UpdateCeoItem([FromForm] UpdateSeoOptimizationDto updateCeoOptimizationDto)
         {
             var item = await _context.CeoOptimizations.FindAsync(updateCeoOptimizationDto.Id);
 

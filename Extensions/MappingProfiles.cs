@@ -17,8 +17,8 @@ namespace ecommerceApi.Extensions
             CreateMap<CreateBrandDto, Brand>();
             CreateMap<CreateBrokerDto, Broker>();
             CreateMap<CreateSettingsDto, Setting>();
-            CreateMap<CeoOptimizationDto, CeoOptimization>();
-            CreateMap<UpdateCeoOptimizationDto, CeoOptimization>();
+            CreateMap<SeoOptimizationDto, SeoOptimization>();
+            CreateMap<UpdateSeoOptimizationDto, SeoOptimization>();
             CreateMap<SocialNetworkDto,SocialNetwork > ();
             CreateMap<UpdateSocialNetworkDto, SocialNetwork>();
             CreateMap<MainMenuDto, MainMenu>();

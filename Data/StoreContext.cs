@@ -19,7 +19,7 @@ namespace ecommerceApi.Data
         public DbSet<Brand> Brands { get; set; }
         public DbSet<Broker> Brokers { get; set; }
         public DbSet<Setting> Settings { get; set; }
-        public DbSet<CeoOptimization> CeoOptimizations { get; set; }
+        public DbSet<SeoOptimization> CeoOptimizations { get; set; }
         public DbSet<CustomUserRole> CustomUserRoles { get; set; }
         public DbSet<SocialNetwork> SocialNetworks { get; set; }
         public DbSet<MainMenu> MainMenuItems { get; set; }
@@ -71,7 +71,7 @@ namespace ecommerceApi.Data
             builder.Entity<Category>().HasIndex(u => u.Priority).IsUnique();
             builder.Entity<Slide>().HasIndex(u => u.Priority).IsUnique();
             builder.Entity<Article>().HasIndex(u => u.Priority).IsUnique();
-            builder.Entity<CeoOptimization>().HasIndex(u => u.Priority).IsUnique();
+            builder.Entity<SeoOptimization>().HasIndex(u => u.Priority).IsUnique();
 
 
 

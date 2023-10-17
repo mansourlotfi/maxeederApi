@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ecommerceApi.DTOs
 {
-    public class CeoOptimizationDto
+    public class SeoOptimizationDto
     {
         public string? Text { get; set; }
         public string? Description { get; set; }
