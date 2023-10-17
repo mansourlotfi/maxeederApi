@@ -40,6 +40,8 @@ namespace ecommerceApi.Controllers
                 TitleEn=x.TitleEn,
                 Page=x.Page,
                 AddedDate=x.AddedDate,
+                ShortDesc=x.ShortDesc,
+                ShortDescEn=x.ShortDescEn,
             }).AsQueryable();
 
             var items = await PagedList<Article>.ToPagedList(query, articlesParams.PageNumber, articlesParams.PageSize);

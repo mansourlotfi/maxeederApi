@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ecommerceApi.Data;
 
@@ -11,9 +12,11 @@ using ecommerceApi.Data;
 namespace ecommerceApi.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    partial class StoreContextModelSnapshot : ModelSnapshot
+    [Migration("20231017193611_CeoOptEntityUpdate")]
+    partial class CeoOptEntityUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -381,9 +384,6 @@ namespace ecommerceApi.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Priority")
-                        .IsUnique();
 
                     b.ToTable("CeoOptimizations");
                 });
@@ -899,14 +899,14 @@ namespace ecommerceApi.Data.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "3f492cbe-84b9-4b4c-9be1-3d5f05435888",
+                            ConcurrencyStamp = "be74bb45-75e2-43c1-a9df-01806e3ee193",
                             Name = "Member",
                             NormalizedName = "MEMBER"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "27405ae1-5eb8-4a60-8a87-3ab14b2c66c4",
+                            ConcurrencyStamp = "253856aa-c63d-4bcb-a8d5-075b0e427b7d",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });

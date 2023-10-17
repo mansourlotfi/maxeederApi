@@ -71,6 +71,8 @@ namespace ecommerceApi.Data
             builder.Entity<Category>().HasIndex(u => u.Priority).IsUnique();
             builder.Entity<Slide>().HasIndex(u => u.Priority).IsUnique();
             builder.Entity<Article>().HasIndex(u => u.Priority).IsUnique();
+            builder.Entity<CeoOptimization>().HasIndex(u => u.Priority).IsUnique();
+
 
 
             //builder.Entity<Setting>().Property(p => p.Id).ValueGeneratedNever();

@@ -2,6 +2,8 @@
 using ecommerceApi.Data;
 using ecommerceApi.DTOs;
 using ecommerceApi.Entities;
+using ecommerceApi.Extensions;
+using ecommerceApi.RequestHelpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -19,44 +21,134 @@ namespace ecommerceApi.Controllers
 
         }
 
+
+        [HttpGet]
+        public async Task<ActionResult<PagedList<CeoOptimization>>> GetPageItems([FromQuery] CeoOptParams? ceoOptParams)
+        {
+            // return await _context.PageItems.ToListAsync();
+            var query = _context.CeoOptimizations.Where(x => x.Page == ceoOptParams.Page).AsQueryable();
+
+            var items = await PagedList<CeoOptimization>.ToPagedList(query, ceoOptParams.PageNumber, ceoOptParams.PageSize);
+
+            Response.AddPaginationHeader(items.MetaData);
+
+            return items;
+
+        }
+
+
         [Authorize(Roles = "Admin")]
-        [HttpPost()]
-        public async Task<ActionResult<CeoOptimization>> CreateCeoOptimization([FromForm] CeoOptimizationDto ceoOptimizationDto) 
+        [HttpPost]
+        public async Task<ActionResult<CeoOptimization>>  CreateCeoOptimization([FromQuery] CeoOptimizationDto ceoOptimizationDto)
         {
-            var previusValue = await _context.CeoOptimizations.FirstOrDefaultAsync();
+            var existing = await _context.CeoOptimizations.FirstOrDefaultAsync(x => x.Priority == ceoOptimizationDto.Priority);
+            if (existing != null) return BadRequest(new ProblemDetails { Title = "Item with this priority exist" });
 
-            if(previusValue == null)
-            {
-                var newSetting = _mapper.Map<CeoOptimization>(ceoOptimizationDto);
+            var item = _mapper.Map<CeoOptimization>(ceoOptimizationDto);
 
-                _context.CeoOptimizations.Add(newSetting);
+            
+            _context.CeoOptimizations.Add(item);
 
-                var resultNewSetting = await _context.SaveChangesAsync() > 0;
+            var result = await _context.SaveChangesAsync() > 0;
 
-                if (resultNewSetting) return Ok(newSetting);
-            }
-            else
-            {
-                _mapper.Map(ceoOptimizationDto, previusValue);
+            if (result) return Ok(item);
 
-                var result = await _context.SaveChangesAsync() > 0;
-
-                if (result) return Ok(previusValue);
-            }
-            return BadRequest(new ProblemDetails { Title = "Problem creating new Setting" });
-
+            return BadRequest(new ProblemDetails { Title = "Problem creating new Item" });
         }
 
-        [HttpGet()]
-        public async Task<ActionResult<CeoOptimization>> GetCeoOptimization()
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut]
+        public async Task<ActionResult<CeoOptimization>> UpdateCeoItem([FromForm] UpdateCeoOptimizationDto updateCeoOptimizationDto)
         {
-            var setting = _context.CeoOptimizations
-           .FirstOrDefault();
+            var item = await _context.CeoOptimizations.FindAsync(updateCeoOptimizationDto.Id);
 
-            if (setting == null) return NotFound();
 
-            return setting;
+            if (item == null) return NotFound();
+
+            var existing = await _context.CeoOptimizations.FirstOrDefaultAsync(x => x.Priority == updateCeoOptimizationDto.Priority && updateCeoOptimizationDto.Priority != item.Priority);
+            if (existing != null) return BadRequest(new ProblemDetails { Title = "Item with this priority exist" });
+
+        
+
+            _mapper.Map(updateCeoOptimizationDto, item);
+
+            var result = await _context.SaveChangesAsync() > 0;
+
+            if (result) return Ok(item);
+
+            return BadRequest(new ProblemDetails { Title = "Problem updating item" });
         }
+
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteItem(int id)
+        {
+            var item = await _context.CeoOptimizations.FindAsync(id);
+
+            if (item == null) return NotFound();
+
+            _context.CeoOptimizations.Remove(item);
+
+            var result = await _context.SaveChangesAsync() > 0;
+
+            if (result) return Ok();
+
+            return BadRequest(new ProblemDetails { Title = "Problem deleting item" });
+        }
+
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut("UpdateMultipleItems")]
+        public async Task<ActionResult> UpdateCeoItemsList([FromBody] List<int> ids)
+        {
+
+            if (ids == null || ids.Count == 0) return NotFound();
+
+            foreach (var id in ids)
+            {
+                var item = await _context.CeoOptimizations.FindAsync(id);
+
+                if (item == null) return NotFound();
+
+                item.IsActive = !item.IsActive;
+
+            }
+
+            var result = await _context.SaveChangesAsync() > 0;
+
+            if (result) return Ok();
+
+            return BadRequest(new ProblemDetails { Title = "Problem updating ceo items" });
+        }
+
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("DeleteMultipleItems")]
+        public async Task<ActionResult> DeleteCeoItemsList([FromBody] List<int> ids)
+        {
+
+            if (ids == null || ids.Count == 0) return NotFound();
+
+            foreach (var id in ids)
+            {
+
+                var item = await _context.CeoOptimizations.FindAsync(id);
+
+                if (item == null) return NotFound();
+
+              
+                _context.CeoOptimizations.Remove(item);
+            }
+
+
+            var result = await _context.SaveChangesAsync() > 0;
+
+            if (result) return Ok();
+
+            return BadRequest(new ProblemDetails { Title = "Problem deleting ceo Items" });
+        }
+
 
     }
 }
