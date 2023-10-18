@@ -98,11 +98,18 @@ namespace ecommerceApi.Controllers
         [HttpGet("{id}", Name = "GetProduct")]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
-            var product = await _context.Products.Include(x => x.Features).ThenInclude(f => f.Feature).FirstOrDefaultAsync(x=>x.Id == id);
+            var product = await _context.Products.Include(x => x.Features).ThenInclude(f => f.Feature).Include(x=>x.MediaList).FirstOrDefaultAsync(x=>x.Id == id);
 
             if (product == null) return NotFound();
 
             product.PictureUrl = String.Format("{0}://{1}{2}/Images/{3}", Request.Scheme, Request.Host, Request.PathBase, product.PictureUrl);
+            product.MediaList = (List<Media>)product.MediaList.Select(M => new Media()
+            {
+                Id = M.Id,
+                MediaFileName = String.Format("{0}://{1}{2}/Images/{3}", Request.Scheme, Request.Host, Request.PathBase, M.MediaFileName),
+                Product=product,
+                ProductId=product.Id
+            }).ToList();
 
             return product;
 
@@ -266,6 +273,13 @@ namespace ecommerceApi.Controllers
                 if (System.IO.File.Exists(filepath))    
                     System.IO.File.Delete(filepath);
             }
+
+            if (product.MediaList.Count>0)
+            {
+
+            _context.MediaList.RemoveRange(product.MediaList);
+            }
+
 
 
             _context.Products.Remove(product);

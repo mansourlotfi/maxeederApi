@@ -34,6 +34,9 @@ namespace ecommerceApi.Data
         public DbSet<Article> Articles { get; set; }
         public DbSet<Usage> Usages { get; set; }
         public DbSet<Size> Sizes { get; set; }
+        public DbSet<Media> MediaList { get; set; }
+
+        
 
 
 
@@ -52,6 +55,11 @@ namespace ecommerceApi.Data
                .WithOne()
                .HasForeignKey<UserAddress>(a => a.Id)
                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Product>()
+                .HasMany(p => p.MediaList)
+                .WithOne(m => m.Product)
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<ProductFeature>()
                 .HasKey(pf => new { pf.ProductId, pf.FeatureId });

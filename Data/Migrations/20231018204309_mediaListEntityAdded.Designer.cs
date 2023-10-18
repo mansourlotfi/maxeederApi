@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ecommerceApi.Data;
 
@@ -11,9 +12,11 @@ using ecommerceApi.Data;
 namespace ecommerceApi.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    partial class StoreContextModelSnapshot : ModelSnapshot
+    [Migration("20231018204309_mediaListEntityAdded")]
+    partial class mediaListEntityAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -507,7 +510,7 @@ namespace ecommerceApi.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ProductId")
+                    b.Property<int?>("ProductId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -862,14 +865,14 @@ namespace ecommerceApi.Data.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "63da370f-07ef-49df-b8eb-8625315e7502",
+                            ConcurrencyStamp = "bab92b10-9cd3-45df-a42c-f18ccb37e3d1",
                             Name = "Member",
                             NormalizedName = "MEMBER"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "3cf89651-3233-49cc-8773-b5c4a66f5c29",
+                            ConcurrencyStamp = "c43e6df3-2389-4c9d-ae58-638d454adc7c",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -1262,13 +1265,9 @@ namespace ecommerceApi.Data.Migrations
 
             modelBuilder.Entity("ecommerceApi.Entities.Media", b =>
                 {
-                    b.HasOne("ecommerceApi.Entities.Product", "Product")
+                    b.HasOne("ecommerceApi.Entities.Product", null)
                         .WithMany("MediaList")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
+                        .HasForeignKey("ProductId");
                 });
 
             modelBuilder.Entity("ecommerceApi.Entities.OrderAggregate.Order", b =>
