@@ -40,10 +40,11 @@ namespace ecommerceApi.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<ActionResult<SeoOptimization>>  CreateCeoOptimization([FromQuery] SeoOptimizationDto seoOptimizationDto)
+        public async Task<ActionResult<SeoOptimization>> CreateSeoOptimization([FromQuery] SeoOptimizationDto seoOptimizationDto)
         {
             var existing = await _context.SeoOptimizations.FirstOrDefaultAsync(x => x.Priority == seoOptimizationDto.Priority);
             if (existing != null) return BadRequest(new ProblemDetails { Title = "Item with this priority exist" });
+
 
             var item = _mapper.Map<SeoOptimization>(seoOptimizationDto);
 
@@ -60,7 +61,7 @@ namespace ecommerceApi.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPut]
-        public async Task<ActionResult<SeoOptimization>> UpdateCeoItem([FromForm] UpdateSeoOptimizationDto updateCeoOptimizationDto)
+        public async Task<ActionResult<SeoOptimization>> UpdateSeoItem([FromForm] UpdateSeoOptimizationDto updateCeoOptimizationDto)
         {
             var item = await _context.SeoOptimizations.FindAsync(updateCeoOptimizationDto.Id);
 
@@ -101,7 +102,7 @@ namespace ecommerceApi.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPut("UpdateMultipleItems")]
-        public async Task<ActionResult> UpdateCeoItemsList([FromBody] List<int> ids)
+        public async Task<ActionResult> UpdateSeoItemsList([FromBody] List<int> ids)
         {
 
             if (ids == null || ids.Count == 0) return NotFound();
@@ -126,7 +127,7 @@ namespace ecommerceApi.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost("DeleteMultipleItems")]
-        public async Task<ActionResult> DeleteCeoItemsList([FromBody] List<int> ids)
+        public async Task<ActionResult> DeleteSeoItemsList([FromBody] List<int> ids)
         {
 
             if (ids == null || ids.Count == 0) return NotFound();

