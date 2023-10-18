@@ -36,7 +36,6 @@ namespace ecommerceApi.DTOs
         public string? Size { get; set; }
         public string? NameEn { get; set; }
         public string? DescriptionEn { get; set; }
-        public List<Media>? MediaList { get; set; } = new List<Media>();
 
 
     }

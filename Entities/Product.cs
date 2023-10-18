@@ -20,7 +20,6 @@
         public string? DescriptionEn { get; set; }
         public List<Media>? MediaList { get; set; } = new List<Media>();
 
-
     }
 }
 
