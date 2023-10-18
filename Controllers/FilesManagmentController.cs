@@ -71,6 +71,7 @@ namespace ecommerceApi.Controllers
 
         }
 
+        [ApiExplorerSettings(IgnoreApi = true)]
         [Authorize(Roles = "Admin")]
         [HttpDelete("delete/{password}", Name = "DeleteAllFiles")]
         public async Task<ActionResult> DeleteAllFiles(string password)
