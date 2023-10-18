@@ -40,12 +40,12 @@ namespace ecommerceApi.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<ActionResult<SeoOptimization>>  CreateCeoOptimization([FromQuery] SeoOptimizationDto ceoOptimizationDto)
+        public async Task<ActionResult<SeoOptimization>>  CreateCeoOptimization([FromQuery] SeoOptimizationDto seoOptimizationDto)
         {
-            var existing = await _context.SeoOptimizations.FirstOrDefaultAsync(x => x.Priority == ceoOptimizationDto.Priority);
+            var existing = await _context.SeoOptimizations.FirstOrDefaultAsync(x => x.Priority == seoOptimizationDto.Priority);
             if (existing != null) return BadRequest(new ProblemDetails { Title = "Item with this priority exist" });
 
-            var item = _mapper.Map<SeoOptimization>(ceoOptimizationDto);
+            var item = _mapper.Map<SeoOptimization>(seoOptimizationDto);
 
             
             _context.SeoOptimizations.Add(item);
