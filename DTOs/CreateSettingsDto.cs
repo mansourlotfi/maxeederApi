@@ -8,10 +8,10 @@ namespace ecommerceApi.DTOs
         [Required]
         public string Email { get; set; }
         public string? Address { get; set; }
+        public string? AddressEn { get; set; }
         public string? Phone { get; set; }
         public string? FooterText { get; set; }
-        public string? ContactUsRitchText { get; set; }
-        public string? ServicesRitchText { get; set; }
-        public IFormFile? File { get; set; }
+        public string? FooterTextEn { get; set; }
+
     }
 }
