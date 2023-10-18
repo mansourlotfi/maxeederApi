@@ -3,14 +3,15 @@
 
     public enum PageEnum
     {
-        home = 1,
+        All = 1,
+        Home,
         Products,
         Services,
         MaxPlus,
         WikiMax,
         ContactUs,
         AboutUs,
-        Partners
+        Partners,
     }
 
     public class SeoOptimization

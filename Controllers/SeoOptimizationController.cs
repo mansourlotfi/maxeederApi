@@ -23,10 +23,11 @@ namespace ecommerceApi.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<PagedList<SeoOptimization>>> GetPageItems([FromQuery] SeoOptParams? ceoOptParams)
+        public async Task<ActionResult<PagedList<SeoOptimization>>> GetPageItems([FromQuery] SeoOptParams ceoOptParams)
         {
-            // return await _context.PageItems.ToListAsync();
-            var query = _context.CeoOptimizations.Where(x => x.Page == ceoOptParams.Page).AsQueryable();
+       
+
+            var query = ceoOptParams.Page == PageEnum.All ? _context.CeoOptimizations.AsQueryable() : _context.CeoOptimizations.Where(x => x.Page == ceoOptParams.Page).AsQueryable();
 
             var items = await PagedList<SeoOptimization>.ToPagedList(query, ceoOptParams.PageNumber, ceoOptParams.PageSize);
 
