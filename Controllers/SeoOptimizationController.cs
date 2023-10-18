@@ -40,7 +40,7 @@ namespace ecommerceApi.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<ActionResult<SeoOptimization>> CreateSeoOptimization([FromQuery] SeoOptimizationDto seoOptimizationDto)
+        public async Task<ActionResult<SeoOptimization>> CreateSeoOptimization([FromBody] SeoOptimizationDto seoOptimizationDto)
         {
             var existing = await _context.SeoOptimizations.FirstOrDefaultAsync(x => x.Priority == seoOptimizationDto.Priority);
             if (existing != null) return BadRequest(new ProblemDetails { Title = "Item with this priority exist" });
@@ -61,7 +61,7 @@ namespace ecommerceApi.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPut]
-        public async Task<ActionResult<SeoOptimization>> UpdateSeoItem([FromForm] UpdateSeoOptimizationDto updateCeoOptimizationDto)
+        public async Task<ActionResult<SeoOptimization>> UpdateSeoItem([FromBody] UpdateSeoOptimizationDto updateCeoOptimizationDto)
         {
             var item = await _context.SeoOptimizations.FindAsync(updateCeoOptimizationDto.Id);
 
