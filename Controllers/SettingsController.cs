@@ -41,48 +41,6 @@ namespace ecommerceApi.Controllers
             else
             {          
 
-                previusSetting.ServicePictureUrl = previusSetting.ServicePictureUrl;
-
-           
-
-            //if (_hostEnvironment.IsDevelopment())
-            //{
-            //    bool exists = System.IO.Directory.Exists("..\\var\\lib\\Upload\\RTF");
-            //    if (!exists)
-            //        System.IO.Directory.CreateDirectory("..\\var\\lib\\Upload\\RTF");
-            //    var ContactUsPath = "..\\var\\lib\\Upload\\RTF\\ContactUsRitchText.txt";
-            //    System.IO.File.WriteAllText(ContactUsPath, String.Empty);
-            //    using StreamWriter swc = new StreamWriter(ContactUsPath);
-            //    swc.Write(settingsDto.ContactUsRitchText);
-            //    swc.Close();
-
-
-            //    var ServicesPath = "..\\var\\lib\\Upload\\RTF\\ServicesRitchText.txt";
-            //    System.IO.File.WriteAllText(ServicesPath, String.Empty);
-            //    using StreamWriter sws = new StreamWriter(ServicesPath);
-            //    sws.Write(settingsDto.ServicesRitchText);
-            //    sws.Close();
-
-            //}
-            //else
-            //{
-            //    bool exists = System.IO.Directory.Exists("..//var//lib//Upload//RTF");
-            //    if (!exists)
-            //        System.IO.Directory.CreateDirectory("..//var//lib//Upload//RTF");
-
-            //    var ContactUsPath = "..//var//lib//Upload//RTF//ContactUsRitchText.txt";
-            //    System.IO.File.WriteAllText(ContactUsPath, String.Empty);
-            //    using StreamWriter swc = new StreamWriter(ContactUsPath);
-            //    swc.Write(settingsDto.ContactUsRitchText);
-            //    swc.Close();
-
-            //    var ServicesPath = "..//var//lib//Upload//RTF//ServicesRitchText.txt";
-            //    System.IO.File.WriteAllText(ServicesPath, String.Empty);
-            //    using StreamWriter sws = new StreamWriter(ServicesPath);
-            //    sws.Write(settingsDto.ServicesRitchText);
-            //    sws.Close();
-
-            //}
 
             _mapper.Map(settingsDto, previusSetting);
 
