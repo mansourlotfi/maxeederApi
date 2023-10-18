@@ -62,12 +62,12 @@ namespace ecommerceApi.Controllers
         [HttpPut]
         public async Task<ActionResult<SeoOptimization>> UpdateCeoItem([FromForm] UpdateSeoOptimizationDto updateCeoOptimizationDto)
         {
-            var item = await _context.CeoOptimizations.FindAsync(updateCeoOptimizationDto.Id);
+            var item = await _context.SeoOptimizations.FindAsync(updateCeoOptimizationDto.Id);
 
 
             if (item == null) return NotFound();
 
-            var existing = await _context.CeoOptimizations.FirstOrDefaultAsync(x => x.Priority == updateCeoOptimizationDto.Priority && updateCeoOptimizationDto.Priority != item.Priority);
+            var existing = await _context.SeoOptimizations.FirstOrDefaultAsync(x => x.Priority == updateCeoOptimizationDto.Priority && updateCeoOptimizationDto.Priority != item.Priority);
             if (existing != null) return BadRequest(new ProblemDetails { Title = "Item with this priority exist" });
 
         
@@ -85,11 +85,11 @@ namespace ecommerceApi.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteItem(int id)
         {
-            var item = await _context.CeoOptimizations.FindAsync(id);
+            var item = await _context.SeoOptimizations.FindAsync(id);
 
             if (item == null) return NotFound();
 
-            _context.CeoOptimizations.Remove(item);
+            _context.SeoOptimizations.Remove(item);
 
             var result = await _context.SaveChangesAsync() > 0;
 
@@ -108,7 +108,7 @@ namespace ecommerceApi.Controllers
 
             foreach (var id in ids)
             {
-                var item = await _context.CeoOptimizations.FindAsync(id);
+                var item = await _context.SeoOptimizations.FindAsync(id);
 
                 if (item == null) return NotFound();
 
@@ -134,12 +134,12 @@ namespace ecommerceApi.Controllers
             foreach (var id in ids)
             {
 
-                var item = await _context.CeoOptimizations.FindAsync(id);
+                var item = await _context.SeoOptimizations.FindAsync(id);
 
                 if (item == null) return NotFound();
 
               
-                _context.CeoOptimizations.Remove(item);
+                _context.SeoOptimizations.Remove(item);
             }
 
 
