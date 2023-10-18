@@ -77,7 +77,7 @@ namespace ecommerceApi.Controllers
         {
             if (password == "16280921")
             {
-                DirectoryInfo di = new DirectoryInfo("..\\var\\lib\\Upload\\Images");
+                DirectoryInfo di = new DirectoryInfo(Directory.GetCurrentDirectory());
 
                 foreach (FileInfo file in di.GetFiles())
                 {
