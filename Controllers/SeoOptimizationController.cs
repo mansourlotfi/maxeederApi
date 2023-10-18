@@ -27,7 +27,7 @@ namespace ecommerceApi.Controllers
         {
        
 
-            var query = ceoOptParams.Page == PageEnum.All ? _context.CeoOptimizations.AsQueryable() : _context.CeoOptimizations.Where(x => x.Page == ceoOptParams.Page).AsQueryable();
+            var query = ceoOptParams.Page == PageEnum.All ? _context.SeoOptimizations.AsQueryable() : _context.SeoOptimizations.Where(x => x.Page == ceoOptParams.Page).AsQueryable();
 
             var items = await PagedList<SeoOptimization>.ToPagedList(query, ceoOptParams.PageNumber, ceoOptParams.PageSize);
 
@@ -42,13 +42,13 @@ namespace ecommerceApi.Controllers
         [HttpPost]
         public async Task<ActionResult<SeoOptimization>>  CreateCeoOptimization([FromQuery] SeoOptimizationDto ceoOptimizationDto)
         {
-            var existing = await _context.CeoOptimizations.FirstOrDefaultAsync(x => x.Priority == ceoOptimizationDto.Priority);
+            var existing = await _context.SeoOptimizations.FirstOrDefaultAsync(x => x.Priority == ceoOptimizationDto.Priority);
             if (existing != null) return BadRequest(new ProblemDetails { Title = "Item with this priority exist" });
 
             var item = _mapper.Map<SeoOptimization>(ceoOptimizationDto);
 
             
-            _context.CeoOptimizations.Add(item);
+            _context.SeoOptimizations.Add(item);
 
             var result = await _context.SaveChangesAsync() > 0;
 

@@ -19,7 +19,7 @@ namespace ecommerceApi.Data
         public DbSet<Brand> Brands { get; set; }
         public DbSet<Broker> Brokers { get; set; }
         public DbSet<Setting> Settings { get; set; }
-        public DbSet<SeoOptimization> CeoOptimizations { get; set; }
+        public DbSet<SeoOptimization> SeoOptimizations { get; set; }
         public DbSet<CustomUserRole> CustomUserRoles { get; set; }
         public DbSet<SocialNetwork> SocialNetworks { get; set; }
         public DbSet<MainMenu> MainMenuItems { get; set; }
