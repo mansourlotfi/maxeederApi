@@ -33,7 +33,7 @@ namespace ecommerceApi.Controllers
             var covertedFiles = new List<string>();
             foreach (var file in files)
             {
-                covertedFiles.Add(String.Format("{0}://{1}{2}/Images/{3}", Request.Scheme, Request.Host, Request.PathBase, Path.GetFileName(file)));
+                covertedFiles.Add(String.Format("https://{1}{2}/Images/{3}", Request.Scheme, Request.Host, Request.PathBase, Path.GetFileName(file)));
             }
 
             if (covertedFiles == null) return NotFound();
