@@ -36,6 +36,10 @@ namespace ecommerceApi.DTOs
         public string? Size { get; set; }
         public string? NameEn { get; set; }
         public string? DescriptionEn { get; set; }
+        [Required]
+        public int Priority { get; set; }
+        public bool? ShowPrice { get; set; } = true;
+        public string SubCategory { get; set; }
 
 
     }

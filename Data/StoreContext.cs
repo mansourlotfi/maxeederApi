@@ -35,14 +35,8 @@ namespace ecommerceApi.Data
         public DbSet<Usage> Usages { get; set; }
         public DbSet<Size> Sizes { get; set; }
         public DbSet<Media> MediaList { get; set; }
-
-        
-
-
-
-
-
-
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<SubCategory> SubCategories { get; set; }
 
 
 

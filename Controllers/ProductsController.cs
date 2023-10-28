@@ -50,10 +50,12 @@ namespace ecommerceApi.Controllers
                     Id = M.Id,
                     MediaFileName = String.Format("{0}://{1}{2}/Images/{3}", Request.Scheme, Request.Host, Request.PathBase, M.MediaFileName) ,
                 }),
+                Priority = x.Priority,
+                ShowPrice = x.ShowPrice,
             })
             .Sort(productParams.OrderBy)
             .Search(productParams.SearchTerm)
-            .Filter(productParams.Brands, productParams.Types,productParams.Size, productParams.Usage)
+            .Filter(productParams.Brands, productParams.Types,productParams.Size, productParams.Usage, productParams.IsActive, productParams.ShowPrice)
             .AsQueryable();
 
             var products = await PagedList<Product>.ToPagedList(query, productParams.PageNumber, productParams.PageSize);
@@ -86,7 +88,9 @@ namespace ecommerceApi.Controllers
                 DescriptionEn = x.DescriptionEn,
                 NameEn = x.NameEn,
                 Usage = x.Usage,
-               MediaList=x.MediaList
+                MediaList=x.MediaList,
+                Priority = x.Priority,
+                ShowPrice = x.ShowPrice,
             }).AsQueryable();
 
             var products = await PagedList<Product>.ToPagedList(query, 1, 10);
@@ -131,6 +135,9 @@ namespace ecommerceApi.Controllers
         [HttpPost]
         public async Task<ActionResult<Product>> CreateProduct([FromForm] CreateProductDto productDto)
         {
+
+            var existing = await _context.Products.FirstOrDefaultAsync(x => x.Priority == productDto.Priority);
+            if (existing != null) return BadRequest(new ProblemDetails { Title = "Item with this priority exist" });
 
             var product = _mapper.Map<Product>(productDto);
             if (productDto.Features?.Count > 0)
@@ -179,6 +186,9 @@ namespace ecommerceApi.Controllers
 
 
             if (product == null) return NotFound();
+
+            var existing = await _context.PageItems.FirstOrDefaultAsync(x => x.Priority == productDto.Priority && productDto.Priority != product.Priority);
+            if (existing != null) return BadRequest(new ProblemDetails { Title = "Item with this priority exist" });
 
             if (productDto.File != null)
             {
@@ -431,9 +441,6 @@ namespace ecommerceApi.Controllers
 
             }
 
-               
-            
-      
 
         }
     }

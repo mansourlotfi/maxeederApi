@@ -11,6 +11,7 @@
         public string? FooterTextEn { get; set; }
         public string? WorkHours { get; set; }
         public string? WorkHoursEn { get; set; }
+        public int? ProductCountInPage { get; set; }
 
     }
 }
