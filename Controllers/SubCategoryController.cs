@@ -57,7 +57,7 @@ namespace ecommerceApi.Controllers
 
         {
 
-            var existing = await _context.Categories.FirstOrDefaultAsync(x => x.Priority == categoryDto.Priority);
+            var existing = await _context.SubCategories.FirstOrDefaultAsync(x => x.Priority == categoryDto.Priority);
             if (existing != null) return BadRequest(new ProblemDetails { Title = "Item with this priority exist" });
 
             //var category = new Category()
