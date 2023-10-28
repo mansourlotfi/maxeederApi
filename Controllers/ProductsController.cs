@@ -268,6 +268,32 @@ namespace ecommerceApi.Controllers
             return BadRequest(new ProblemDetails { Title = "Problem updating product media" });
         }
 
+        [HttpPost("UpdateProductComments")]
+        public async Task<ActionResult> UpdateProductComments([FromForm] CreateProductCommentDto productDto)
+        {
+            var product = await _context.Products.Include(x => x.Features).ThenInclude(y => y.Feature).FirstOrDefaultAsync(x => x.Id == productDto.Id);
+
+
+            if (product == null) return NotFound();
+
+     
+                product.CommentList.Add(new Comment
+                {
+                    Email=productDto.Email,
+                    Name=productDto.Name,
+                    Text=productDto.Text,
+                    IsActive=false
+                });
+
+            _mapper.Map(productDto, product);
+
+            var result = await _context.SaveChangesAsync() > 0;
+
+            if (result) return Ok(product);
+
+            return BadRequest(new ProblemDetails { Title = "Problem updating product comment" });
+        }
+
         [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteProduct(int id)

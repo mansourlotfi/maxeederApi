@@ -19,6 +19,7 @@
         public string? NameEn { get; set; }
         public string? DescriptionEn { get; set; }
         public List<Media>? MediaList { get; set; } = new List<Media>();
+        public List<Comment>? CommentList { get; set; } = new List<Comment>();
         public int Priority { get; set; }
         public bool? ShowPrice { get; set; } = true;
         public string SubCategory { get; set; }

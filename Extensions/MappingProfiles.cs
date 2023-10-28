@@ -11,6 +11,7 @@ namespace ecommerceApi.Extensions
             CreateMap<CreateProductDto, Product>().ForMember(dest => dest.Features, opt => opt.Ignore());
             CreateMap<UpdateProductDto, Product>().ForMember(dest => dest.Features, opt => opt.Ignore());
             CreateMap<UpdateProductMediaDto, Product>();
+            CreateMap<CreateProductCommentDto, Product>();            
             CreateMap<CreateFeatureDto, Feature>();
             CreateMap<CreateCategoryDto, Category>();
             CreateMap<UpdateCategoryDto, Category>();
