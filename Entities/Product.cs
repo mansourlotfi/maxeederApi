@@ -22,7 +22,7 @@
         public List<Comment>? CommentList { get; set; } = new List<Comment>();
         public int Priority { get; set; }
         public bool? ShowPrice { get; set; } = true;
-        public string SubCategory { get; set; }
+        public string? SubCategory { get; set; }
     }
 }
 
