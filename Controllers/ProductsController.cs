@@ -187,7 +187,7 @@ namespace ecommerceApi.Controllers
 
             if (product == null) return NotFound();
 
-            var existing = await _context.PageItems.FirstOrDefaultAsync(x => x.Priority == productDto.Priority && productDto.Priority != product.Priority);
+            var existing = await _context.Products.FirstOrDefaultAsync(x => x.Priority == productDto.Priority && productDto.Priority != product.Priority);
             if (existing != null) return BadRequest(new ProblemDetails { Title = "Item with this priority exist" });
 
             if (productDto.File != null)
