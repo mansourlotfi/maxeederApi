@@ -2,6 +2,7 @@
 using ecommerceApi.Data;
 using ecommerceApi.DTOs;
 using ecommerceApi.Entities;
+using ecommerceApi.Extensions;
 using ecommerceApi.RequestHelpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -36,8 +37,9 @@ namespace ecommerceApi.Controllers
                 DescriptionEn=x.DescriptionEn,
             }).AsQueryable();
 
-            var features = await PagedList<Feature>.ToPagedList(query, 1, 10);
+            var features = await PagedList<Feature>.ToPagedList(query, productParams.PageNumber, productParams.PageSize);
 
+            Response.AddPaginationHeader(features.MetaData);
 
             return features;
 
