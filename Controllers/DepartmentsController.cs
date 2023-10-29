@@ -23,7 +23,7 @@ namespace ecommerceApi.Controllers
         [HttpGet]
         public async Task<ActionResult<PagedList<Department>>> GetDepartments([FromQuery] PaginationParams? paginationParams)
         {
-            var query =  _context.Departments.AsQueryable();
+            var query =  _context.Departments.SearchDepartment(paginationParams.SearchTerm).AsQueryable();
             var items = await PagedList<Department>.ToPagedList(query, paginationParams.PageNumber, paginationParams.PageSize);
 
             Response.AddPaginationHeader(items.MetaData);

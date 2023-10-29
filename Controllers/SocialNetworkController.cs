@@ -37,7 +37,7 @@ namespace ecommerceApi.Controllers
                 Priority = x.Priority,
                 IsActive=x.IsActive,
                 NameEn=x.NameEn,
-            }).AsQueryable();
+            }).SearchSocialNet(paginationParams.SearchTerm).AsQueryable();
 
             var socialNetwork = await PagedList<SocialNetwork>.ToPagedList(query, paginationParams.PageNumber, paginationParams.PageSize);
 

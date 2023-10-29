@@ -98,7 +98,7 @@ namespace ecommerceApi.Controllers
                 Email=x.Email,
                 IsActive=x.IsActive??false
 
-            })
+            }).SearchUser(paginationParams.SearchTerm)
             .AsQueryable();
 
             var users = await PagedList<UserListDto>.ToPagedList(query, paginationParams.PageNumber, paginationParams.PageSize);

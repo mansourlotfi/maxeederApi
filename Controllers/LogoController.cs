@@ -38,7 +38,7 @@ namespace ecommerceApi.Controllers
                 Priority = x.Priority,
                 IsActive=x.IsActive,
                 NameEn=x.NameEn,
-            }).AsQueryable();
+            }).SearchLogo(paginationParams.SearchTerm).AsQueryable();
 
             var logo = await PagedList<Logo>.ToPagedList(query, paginationParams.PageNumber, paginationParams.PageSize);
 

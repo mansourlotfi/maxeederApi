@@ -24,7 +24,7 @@ namespace ecommerceApi.Controllers
         [HttpGet]
         public async Task<ActionResult<PagedList<Size>>> GetSize([FromQuery] PaginationParams? paginationParams)
         {
-            var query =  _context.Sizes.AsQueryable();
+            var query =  _context.Sizes.SearchSizes(paginationParams.SearchTerm).AsQueryable();
             var items = await PagedList<Size>.ToPagedList(query, paginationParams.PageNumber, paginationParams.PageSize);
 
             Response.AddPaginationHeader(items.MetaData);

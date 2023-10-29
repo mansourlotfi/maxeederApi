@@ -37,7 +37,7 @@ namespace ecommerceApi.Controllers
                 NameEn = x.NameEn,
                 
                 
-            }).AsQueryable();
+            }).SearchSubCategory(paginationParams.SearchTerm).AsQueryable();
 
             var items = await PagedList<SubCategory>.ToPagedList(query, paginationParams.PageNumber, paginationParams.PageSize);
 

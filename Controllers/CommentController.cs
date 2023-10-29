@@ -30,7 +30,7 @@ namespace ecommerceApi.Controllers
                 IsActive = x.IsActive,
                 Name = x.Name,
                 Text=x.Text,   
-            }).AsQueryable();
+            }).SearchComment(paginationParams.SearchTerm).AsQueryable();
 
             var comments = await PagedList<Comment>.ToPagedList(query, paginationParams.PageNumber, paginationParams.PageSize);
 

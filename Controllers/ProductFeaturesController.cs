@@ -25,7 +25,7 @@ namespace ecommerceApi.Controllers
         [HttpGet]
         public async Task<ActionResult<PagedList<Feature>>> GetFeatures([FromQuery] ProductParams? productParams)
         {
-            var query =  _context.Features.Select(x => new Feature()
+            var query = _context.Features.Select(x => new Feature()
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -34,8 +34,8 @@ namespace ecommerceApi.Controllers
                 IsActive = x.IsActive,
                 Products=x.Products,
                 NameEn=x.NameEn,
-                DescriptionEn=x.DescriptionEn,
-            }).AsQueryable();
+                DescriptionEn = x.DescriptionEn,
+            }).SearchProductFeatures(productParams.SearchTerm).AsQueryable();
 
             var features = await PagedList<Feature>.ToPagedList(query, productParams.PageNumber, productParams.PageSize);
 

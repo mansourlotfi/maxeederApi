@@ -36,7 +36,7 @@ namespace ecommerceApi.Controllers
                 IsActive=x.IsActive,
                 NameEn=x.NameEn,
                 TextEn=x.TextEn,
-            }).AsQueryable();
+            }).SearchArtist(paginationParams.SearchTerm).AsQueryable();
 
             var artist = await PagedList<Artist>.ToPagedList(query, paginationParams.PageNumber, paginationParams.PageSize);
 

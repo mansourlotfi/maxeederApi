@@ -33,7 +33,7 @@ namespace ecommerceApi.Controllers
                 Priority = x.Priority,
                 IsActive=x.IsActive,
                 TitleEn=x.TitleEn,
-            }).AsQueryable();
+            }).SearchMainMenu(paginationParams.SearchTerm).AsQueryable();
 
             var menu = await PagedList<MainMenu>.ToPagedList(query, paginationParams.PageNumber, paginationParams.PageSize);
 

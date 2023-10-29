@@ -38,7 +38,7 @@ namespace ecommerceApi.Controllers
                 Text = x.Text,
                 AddedDate=x.AddedDate,
                 IsActive=x.IsActive,
-            }).AsQueryable();
+            }).SearchMessage(paginationParams.SearchTerm).AsQueryable();
 
             var meessages = await PagedList<Message>.ToPagedList(query, paginationParams.PageNumber, paginationParams.PageSize);
 

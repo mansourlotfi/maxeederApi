@@ -36,7 +36,7 @@ namespace ecommerceApi.Controllers
                 Page=x.Page,
                 IsActive=x.IsActive,
                 NameEn=x.NameEn,
-            }).AsQueryable();
+            }).SearchSlide(slideParams.SearchTerm).AsQueryable();
 
             var slides = await PagedList<Slide>.ToPagedList(query, slideParams.PageNumber, slideParams.PageSize);
 

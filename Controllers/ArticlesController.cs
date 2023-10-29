@@ -42,7 +42,7 @@ namespace ecommerceApi.Controllers
                 AddedDate=x.AddedDate,
                 ShortDesc=x.ShortDesc,
                 ShortDescEn=x.ShortDescEn,
-            }).AsQueryable();
+            }).SearchArticles(articlesParams.SearchTerm).AsQueryable();
 
             var items = await PagedList<Article>.ToPagedList(query, articlesParams.PageNumber, articlesParams.PageSize);
 
