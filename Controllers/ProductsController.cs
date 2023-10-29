@@ -52,6 +52,7 @@ namespace ecommerceApi.Controllers
                 }),
                 Priority = x.Priority,
                 ShowPrice = x.ShowPrice,
+                SubCategory = x.SubCategory,
             })
             .Sort(productParams.OrderBy)
             .Search(productParams.SearchTerm)
