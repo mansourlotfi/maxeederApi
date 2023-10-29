@@ -92,6 +92,7 @@ namespace ecommerceApi.Controllers
                 MediaList=x.MediaList,
                 Priority = x.Priority,
                 ShowPrice = x.ShowPrice,
+                SubCategory = x.SubCategory,
             }).AsQueryable();
 
             var products = await PagedList<Product>.ToPagedList(query, 1, 10);
