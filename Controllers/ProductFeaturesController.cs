@@ -2,6 +2,7 @@
 using ecommerceApi.Data;
 using ecommerceApi.DTOs;
 using ecommerceApi.Entities;
+using ecommerceApi.RequestHelpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -21,9 +22,9 @@ namespace ecommerceApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<Feature>> GetFeatures()
+        public async Task<ActionResult<PagedList<Feature>>> GetFeatures([FromQuery] ProductParams? productParams)
         {
-            var features = await _context.Features.Select(x => new Feature()
+            var query =  _context.Features.Select(x => new Feature()
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -33,10 +34,12 @@ namespace ecommerceApi.Controllers
                 Products=x.Products,
                 NameEn=x.NameEn,
                 DescriptionEn=x.DescriptionEn,
-            }).ToListAsync();
+            }).AsQueryable();
 
-            if (features == null) return NotFound();
-            return Ok(features);
+            var features = await PagedList<Feature>.ToPagedList(query, 1, 10);
+
+
+            return features;
 
         }
 

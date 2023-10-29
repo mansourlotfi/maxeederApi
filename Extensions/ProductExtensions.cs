@@ -31,10 +31,7 @@ namespace ecommerceApi.Extensions
             var typeList = new List<string>();
             var sizeList = new List<string>();
             var usageList = new List<string>();
-            var isActiveList = new List<string>();
-            var showPriceList = new List<string>();
-
-
+    
 
             if (!string.IsNullOrEmpty(brands))
                 brandList.AddRange(brands.ToLower().Split(",").ToList());
