@@ -2,6 +2,8 @@
 using ecommerceApi.Data;
 using ecommerceApi.DTOs;
 using ecommerceApi.Entities;
+using ecommerceApi.Extensions;
+using ecommerceApi.RequestHelpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -20,11 +22,14 @@ namespace ecommerceApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<Size>> GetSize()
+        public async Task<ActionResult<PagedList<Size>>> GetSize([FromQuery] PaginationParams? paginationParams)
         {
-            var sizes = await _context.Sizes.ToListAsync();
-            if (sizes == null) return NotFound();
-            return Ok(sizes);
+            var query =  _context.Sizes.AsQueryable();
+            var items = await PagedList<Size>.ToPagedList(query, paginationParams.PageNumber, paginationParams.PageSize);
+
+            Response.AddPaginationHeader(items.MetaData);
+
+            return items;
         }
 
         [Authorize(Roles = "Admin")]

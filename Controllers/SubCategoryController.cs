@@ -2,6 +2,8 @@
 using ecommerceApi.Data;
 using ecommerceApi.DTOs;
 using ecommerceApi.Entities;
+using ecommerceApi.Extensions;
+using ecommerceApi.RequestHelpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -22,9 +24,9 @@ namespace ecommerceApi.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<SubCategory>> GetCategories()
+        public async Task<ActionResult<PagedList<SubCategory>>> GetCategories([FromQuery] PaginationParams? paginationParams)
         {
-            var categories = await _context.SubCategories.Select(x => new SubCategory()
+            var query =  _context.SubCategories.Select(x => new SubCategory()
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -33,10 +35,15 @@ namespace ecommerceApi.Controllers
                 Priority = x.Priority,
                 IsActive = x.IsActive,
                 NameEn = x.NameEn,
-            }).ToListAsync();
+                
+                
+            }).AsQueryable();
 
-            if (categories == null) return NotFound();
-            return Ok(categories);
+            var items = await PagedList<SubCategory>.ToPagedList(query, paginationParams.PageNumber, paginationParams.PageSize);
+
+            Response.AddPaginationHeader(items.MetaData);
+
+            return items;
         }
 
         [HttpGet("{id}", Name = "GetSubCategory")]

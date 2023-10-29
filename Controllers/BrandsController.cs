@@ -2,6 +2,8 @@
 using ecommerceApi.Data;
 using ecommerceApi.DTOs;
 using ecommerceApi.Entities;
+using ecommerceApi.Extensions;
+using ecommerceApi.RequestHelpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -23,19 +25,22 @@ namespace ecommerceApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<Brand>> GetBrands()
+        public async Task<ActionResult<PagedList<Brand>>> GetBrands([FromQuery] PaginationParams? paginationParams)
         {
-            var brands = await _context.Brands.Select(x => new Brand()
+            var query =  _context.Brands.Select(x => new Brand()
             {
                 Id = x.Id,
                 Name = x.Name,
                 PictureUrl = String.Format("{0}://{1}{2}/Images/{3}", Request.Scheme, Request.Host, Request.PathBase, x.PictureUrl),
                 IsActive=x.IsActive,  
                 NameEn=x.NameEn,
-            }).ToListAsync();
+            }).AsQueryable();
 
-            if (brands == null) return NotFound();
-            return Ok(brands);
+            var items = await PagedList<Brand>.ToPagedList(query, paginationParams.PageNumber, paginationParams.PageSize);
+
+            Response.AddPaginationHeader(items.MetaData);
+
+            return items;
 
         }
 
