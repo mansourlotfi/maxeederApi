@@ -102,7 +102,7 @@ namespace ecommerceApi.Controllers
         [HttpGet("{id}", Name = "GetProduct")]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
-            var product = await _context.Products.Include(x => x.Features).ThenInclude(f => f.Feature).Include(x=>x.MediaList).FirstOrDefaultAsync(x=>x.Id == id);
+            var product = await _context.Products.Include(x => x.Features).ThenInclude(f => f.Feature).Include(x=>x.MediaList).Include(Y=>Y.CommentList).FirstOrDefaultAsync(x=>x.Id == id);
 
             if (product == null) return NotFound();
 
