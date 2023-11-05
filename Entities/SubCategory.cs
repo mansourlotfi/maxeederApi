@@ -9,5 +9,8 @@
         public int Priority { get; set; }
         public bool? IsActive { get; set; } = true;
         public string? NameEn { get; set; }
+        public int CategoryId { get; set; } 
+        public Category Category { get; set; }
+        public List<Product>? Product { get; set; } = new List<Product>();
     }
 }

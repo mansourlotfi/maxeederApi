@@ -808,17 +808,15 @@ namespace ecommerceApi.Data.Migrations
                     b.Property<string>("Size")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("SubCategory")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("SubCategoryId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Usage")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SubCategoryId");
 
                     b.ToTable("Products");
                 });
@@ -904,14 +902,14 @@ namespace ecommerceApi.Data.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "146a3894-f569-449a-b174-c9316717aee1",
+                            ConcurrencyStamp = "e9ce6d7e-2377-47f3-bbd6-94aa39c78482",
                             Name = "Member",
                             NormalizedName = "MEMBER"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "13deccac-862f-43f4-9b96-3cd041fb0a73",
+                            ConcurrencyStamp = "0360f135-6692-45d2-9e94-70cd056bd9e0",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -1115,6 +1113,9 @@ namespace ecommerceApi.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
                     b.Property<bool?>("IsActive")
                         .HasColumnType("bit");
 
@@ -1137,6 +1138,11 @@ namespace ecommerceApi.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("Priority")
+                        .IsUnique();
 
                     b.ToTable("SubCategories");
                 });
@@ -1434,6 +1440,16 @@ namespace ecommerceApi.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ecommerceApi.Entities.Product", b =>
+                {
+                    b.HasOne("ecommerceApi.Entities.SubCategory", "SubCategory")
+                        .WithMany("Product")
+                        .HasForeignKey("SubCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("SubCategory");
+                });
+
             modelBuilder.Entity("ecommerceApi.Entities.ProductFeature", b =>
                 {
                     b.HasOne("ecommerceApi.Entities.Feature", "Feature")
@@ -1453,6 +1469,17 @@ namespace ecommerceApi.Data.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("ecommerceApi.Entities.SubCategory", b =>
+                {
+                    b.HasOne("ecommerceApi.Entities.Category", "Category")
+                        .WithMany("SubCategory")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
             modelBuilder.Entity("ecommerceApi.Entities.UserAddress", b =>
                 {
                     b.HasOne("ecommerceApi.Entities.User", null)
@@ -1465,6 +1492,11 @@ namespace ecommerceApi.Data.Migrations
             modelBuilder.Entity("ecommerceApi.Entities.Basket", b =>
                 {
                     b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("ecommerceApi.Entities.Category", b =>
+                {
+                    b.Navigation("SubCategory");
                 });
 
             modelBuilder.Entity("ecommerceApi.Entities.Feature", b =>
@@ -1484,6 +1516,11 @@ namespace ecommerceApi.Data.Migrations
                     b.Navigation("Features");
 
                     b.Navigation("MediaList");
+                });
+
+            modelBuilder.Entity("ecommerceApi.Entities.SubCategory", b =>
+                {
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("ecommerceApi.Entities.User", b =>

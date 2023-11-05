@@ -19,8 +19,7 @@ namespace ecommerceApi.DTOs
 
         public IFormFile? File { get; set; }
 
-        [Required]
-        public string Type { get; set; }
+        public int? SubCategoryId { get; set; }
 
         [Required]
         public string Brand { get; set; }
@@ -39,7 +38,6 @@ namespace ecommerceApi.DTOs
         [Required]
         public int Priority { get; set; }
         public bool? ShowPrice { get; set; } = true;
-        public string? SubCategory { get; set; }
 
     }
 }

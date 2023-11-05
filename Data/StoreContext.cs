@@ -55,6 +55,21 @@ namespace ecommerceApi.Data
                 .WithOne(m => m.Product)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            builder.Entity<SubCategory>()
+                .HasMany(e => e.Product)
+                .WithOne(e => e.SubCategory)
+                .HasForeignKey(e => e.SubCategoryId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Cascade);
+
+
+            builder.Entity<Category>()
+              .HasMany(e => e.SubCategory)
+              .WithOne(e => e.Category)
+              .HasForeignKey(e => e.CategoryId)
+              .OnDelete(DeleteBehavior.Cascade);
+
+
             builder.Entity<ProductFeature>()
                 .HasKey(pf => new { pf.ProductId, pf.FeatureId });
             builder.Entity<ProductFeature>()
@@ -66,11 +81,13 @@ namespace ecommerceApi.Data
                 .WithMany(pf => pf.Products)
                 .HasForeignKey(pf => pf.FeatureId);
 
+
             builder.Entity<SocialNetwork>().HasIndex(u => u.Priority).IsUnique();
             builder.Entity<MainMenu>().HasIndex(u => u.Priority).IsUnique();
             builder.Entity<QuickAccess>().HasIndex(u => u.Priority).IsUnique();
             builder.Entity<Logo>().HasIndex(u => u.Priority).IsUnique();
             builder.Entity<Category>().HasIndex(u => u.Priority).IsUnique();
+            builder.Entity<SubCategory>().HasIndex(u => u.Priority).IsUnique();
             builder.Entity<Slide>().HasIndex(u => u.Priority).IsUnique();
             builder.Entity<Article>().HasIndex(u => u.Priority).IsUnique();
             builder.Entity<SeoOptimization>().HasIndex(u => u.Priority).IsUnique();

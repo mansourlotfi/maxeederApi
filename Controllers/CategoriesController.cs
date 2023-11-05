@@ -35,6 +35,7 @@ namespace ecommerceApi.Controllers
                 Priority=x.Priority,
                 IsActive=x.IsActive,
                 NameEn=x.NameEn,
+                SubCategory=x.SubCategory,
             }).SearchCategory(paginationParams.SearchTerm).AsQueryable();
 
             var items = await PagedList<Category>.ToPagedList(query, paginationParams.PageNumber, paginationParams.PageSize);
@@ -84,6 +85,23 @@ namespace ecommerceApi.Controllers
                 category.PictureUrl = fileName;
             }
 
+            if (categoryDto.SubCategories?.Count > 0)
+            {
+                foreach (var item in categoryDto.SubCategories)
+                {
+                    var existingSubCategory = await _context.SubCategories.FirstOrDefaultAsync(x => x.Id == item);
+
+                    if (existingSubCategory != null)
+                    {
+                    category.SubCategory.Add(existingSubCategory);
+                    }
+                    else
+                    {
+                        return BadRequest(new ProblemDetails { Title = "Problem creating new category whit this sub category" });
+                    }
+                }
+            }
+
             _context.Categories.Add(category);
 
 
@@ -121,6 +139,32 @@ namespace ecommerceApi.Controllers
                 category.PictureUrl = category.PictureUrl;
 
             }
+
+            if (updateCategoryDto.SubCategories?.Count > 0)
+            {
+
+                var existingIds = category.SubCategory.Select(x => x.CategoryId).ToList();
+                var selectedIds = updateCategoryDto.SubCategories.ToList();
+                var toAdd = selectedIds.Except(existingIds).ToList();
+                var toRemove = existingIds.Except(selectedIds).ToList();
+
+                category.SubCategory = category.SubCategory.Where(x => !toRemove.Contains(x.CategoryId)).ToList();
+
+                foreach (var item in toAdd)
+                {
+                    var existingSubCategory = await _context.SubCategories.FirstOrDefaultAsync(x => x.Id == item);
+
+                    if (existingSubCategory != null)
+                    {
+                        category.SubCategory.Add(existingSubCategory);
+                    }
+
+                  
+                }
+
+            }
+
+
 
             _mapper.Map(updateCategoryDto, category);
 
@@ -171,7 +215,7 @@ namespace ecommerceApi.Controllers
 
                 if (item == null) return NotFound();
 
-                item.IsActive = !item.IsActive;
+                item.IsActive = !(bool)item.IsActive;
 
             }
 

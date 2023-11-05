@@ -16,6 +16,8 @@ namespace ecommerceApi.DTOs
         public int Priority { get; set; }
         public bool? IsActive { get; set; } = true;
         public string? NameEn { get; set; }
+        public List<int>? SubCategories { get; set; } = new List<int>();
+
 
     }
 }

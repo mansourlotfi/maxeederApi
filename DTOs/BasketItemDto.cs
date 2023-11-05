@@ -1,4 +1,6 @@
-﻿namespace ecommerceApi.DTOs
+﻿using ecommerceApi.Entities;
+
+namespace ecommerceApi.DTOs
 {
     public class BasketItemDto
     {
@@ -7,7 +9,7 @@
         public long Price { get; set; }
         public string PictureUrl { get; set; }
         public string Brand { get; set; }
-        public string Type { get; set; }
+        public SubCategory? SubCategory { get; set; } = null!;
         public int Quantity { get; set; }
     }
 }

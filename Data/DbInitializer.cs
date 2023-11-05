@@ -33,29 +33,30 @@ namespace ecommerceApi.Data
                 
             }
 
-            if (context.Categories.Any()) return;
-            var categories = new List<Category>()
-            {
-                new Category
-                {
-                    Id = 1,
-                    Name="دسته بندی 1",
-                    PictureUrl="638231191664402793.jpg"
-                },
-                 new Category
-                {
-                    Id = 2,
-                    Name="دسته بندی21",
-                    PictureUrl="638231191664402793.jpg"
-                }
+            //if (context.Categories.Any()) return;
+            //var categories = new List<Category>()
+            //{
+            //    new Category
+            //    {
+            //        Id = 1,
+            //        Name="دسته بندی 1",
+            //        PictureUrl="638231191664402793.jpg",
+                    
 
-            };
+            //    },
+            //     new Category
+            //    {
+            //        Id = 2,
+            //        Name="دسته بندی 2",
+            //        PictureUrl="638231191664402793.jpg"
+            //    }
 
-            foreach (var item in categories)
-            {
-                context.Categories.Add(item);
-            }
-            context.SaveChanges();
+            //};
+
+            //foreach (var item in categories)
+            //{
+            //    context.Categories.Add(item);
+            //}
 
             if (context.Brands.Any()) return;
             var brands = new List<Brand>()
@@ -81,48 +82,47 @@ namespace ecommerceApi.Data
             {
                 context.Brands.Add(item);
             }
+
             context.SaveChanges();
 
 
-            if (context.Products.Any()) return;
+//            if (context.Products.Any()) return;
 
-            var products = new List<Product>
-            {
-                new Product
-                {
-                    Name = "محصول 1",
-                    Description =
-                        "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است",
-                    Price = 20000,
-                    PictureUrl = "638231191664402793.jpg",
-                    Brand = "برند 1",
-                    Type = "دسته بندی 1",
-                    QuantityInStock = 100,
-                    IsFeatured=false,
+//            var products = new List<Product>
+//            {
+//                new Product
+//                {
+//                    Name = "محصول 1",
+//                    Description =
+//                        "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است",
+//                    Price = 20000,
+//                    PictureUrl = "638231191664402793.jpg",
+//                    Brand = "برند 1",
+//                    QuantityInStock = 100,
+//                    IsFeatured=false,
                     
                     
-                },
-                new Product
-             {
-                    Name = "محصول 2",
-                    Description =
-                        "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است",
-                    Price = 20000,
-                    PictureUrl = "638231191664402793.jpg",
-                    Brand = "برند 2",
-                    Type = "دسته بندی 2",
-                    QuantityInStock = 100,
-                    IsFeatured=false
-                },
+//                },
+//                new Product
+//             {
+//                    Name = "محصول 2",
+//                    Description =
+//                        "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است",
+//                    Price = 20000,
+//                    PictureUrl = "638231191664402793.jpg",
+//                    Brand = "برند 2",
+//                    QuantityInStock = 100,
+//                    IsFeatured=false
+//                },
 
 
-};
+//};
 
-            foreach (var item in products)
-            {
-                context.Products.Add(item);
-            }
-            context.SaveChanges();
+//            foreach (var item in products)
+//            {
+//                context.Products.Add(item);
+//            }
+//            context.SaveChanges();
 
 
         }

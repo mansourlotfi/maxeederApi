@@ -12,8 +12,8 @@ using ecommerceApi.Data;
 namespace ecommerceApi.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20231016090514_PageItemsEnProprty")]
-    partial class PageItemsEnProprty
+    [Migration("20231105155241_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -354,7 +354,7 @@ namespace ecommerceApi.Data.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("ecommerceApi.Entities.CeoOptimization", b =>
+            modelBuilder.Entity("ecommerceApi.Entities.Comment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -362,15 +362,29 @@ namespace ecommerceApi.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("MetaTagDescription")
+                    b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("MetaTagKeyWords")
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("CeoOptimizations");
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("ecommerceApi.Entities.CustomUserRole", b =>
@@ -515,6 +529,28 @@ namespace ecommerceApi.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("MainMenuItems");
+                });
+
+            modelBuilder.Entity("ecommerceApi.Entities.Media", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("MediaFileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("MediaList");
                 });
 
             modelBuilder.Entity("ecommerceApi.Entities.Message", b =>
@@ -677,6 +713,12 @@ namespace ecommerceApi.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AddressEn")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("CEO")
                         .HasColumnType("nvarchar(max)");
 
@@ -757,20 +799,27 @@ namespace ecommerceApi.Data.Migrations
                     b.Property<long?>("Price")
                         .HasColumnType("bigint");
 
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
+
                     b.Property<int>("QuantityInStock")
                         .HasColumnType("int");
+
+                    b.Property<bool?>("ShowPrice")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Size")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("SubCategoryId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Usage")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SubCategoryId");
 
                     b.ToTable("Products");
                 });
@@ -856,17 +905,66 @@ namespace ecommerceApi.Data.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "a132b6bc-23e0-4213-9897-370e267a91bb",
+                            ConcurrencyStamp = "e9ce6d7e-2377-47f3-bbd6-94aa39c78482",
                             Name = "Member",
                             NormalizedName = "MEMBER"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "0f818c18-3e42-41e7-85de-a3059db6c8a7",
+                            ConcurrencyStamp = "0360f135-6692-45d2-9e94-70cd056bd9e0",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
+                });
+
+            modelBuilder.Entity("ecommerceApi.Entities.SeoOptimization", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DescriptionEn")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MetaTagDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MetaTagDescriptionEn")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MetaTagKeyWords")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MetaTagKeyWordsEn")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Page")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TextEn")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Priority")
+                        .IsUnique();
+
+                    b.ToTable("SeoOptimizations");
                 });
 
             modelBuilder.Entity("ecommerceApi.Entities.Setting", b =>
@@ -880,10 +978,7 @@ namespace ecommerceApi.Data.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ContactUsRitchText")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
+                    b.Property<string>("AddressEn")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
@@ -893,13 +988,19 @@ namespace ecommerceApi.Data.Migrations
                     b.Property<string>("FooterText")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("FooterTextEn")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ServicePictureUrl")
+                    b.Property<int?>("ProductCountInPage")
+                        .HasColumnType("int");
+
+                    b.Property<string>("WorkHours")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ServicesRitchText")
+                    b.Property<string>("WorkHoursEn")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -1005,6 +1106,48 @@ namespace ecommerceApi.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("SocialNetworks");
+                });
+
+            modelBuilder.Entity("ecommerceApi.Entities.SubCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Link")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameEn")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PictureUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("Priority")
+                        .IsUnique();
+
+                    b.ToTable("SubCategories");
                 });
 
             modelBuilder.Entity("ecommerceApi.Entities.Usage", b =>
@@ -1205,6 +1348,24 @@ namespace ecommerceApi.Data.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("ecommerceApi.Entities.Comment", b =>
+                {
+                    b.HasOne("ecommerceApi.Entities.Product", null)
+                        .WithMany("CommentList")
+                        .HasForeignKey("ProductId");
+                });
+
+            modelBuilder.Entity("ecommerceApi.Entities.Media", b =>
+                {
+                    b.HasOne("ecommerceApi.Entities.Product", "Product")
+                        .WithMany("MediaList")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("ecommerceApi.Entities.OrderAggregate.Order", b =>
                 {
                     b.OwnsOne("ecommerceApi.Entities.OrderAggregate.ShippingAddress", "ShippingAddress", b1 =>
@@ -1282,6 +1443,16 @@ namespace ecommerceApi.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ecommerceApi.Entities.Product", b =>
+                {
+                    b.HasOne("ecommerceApi.Entities.SubCategory", "SubCategory")
+                        .WithMany("Product")
+                        .HasForeignKey("SubCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("SubCategory");
+                });
+
             modelBuilder.Entity("ecommerceApi.Entities.ProductFeature", b =>
                 {
                     b.HasOne("ecommerceApi.Entities.Feature", "Feature")
@@ -1301,6 +1472,17 @@ namespace ecommerceApi.Data.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("ecommerceApi.Entities.SubCategory", b =>
+                {
+                    b.HasOne("ecommerceApi.Entities.Category", "Category")
+                        .WithMany("SubCategory")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
             modelBuilder.Entity("ecommerceApi.Entities.UserAddress", b =>
                 {
                     b.HasOne("ecommerceApi.Entities.User", null)
@@ -1315,6 +1497,11 @@ namespace ecommerceApi.Data.Migrations
                     b.Navigation("Items");
                 });
 
+            modelBuilder.Entity("ecommerceApi.Entities.Category", b =>
+                {
+                    b.Navigation("SubCategory");
+                });
+
             modelBuilder.Entity("ecommerceApi.Entities.Feature", b =>
                 {
                     b.Navigation("Products");
@@ -1327,7 +1514,16 @@ namespace ecommerceApi.Data.Migrations
 
             modelBuilder.Entity("ecommerceApi.Entities.Product", b =>
                 {
+                    b.Navigation("CommentList");
+
                     b.Navigation("Features");
+
+                    b.Navigation("MediaList");
+                });
+
+            modelBuilder.Entity("ecommerceApi.Entities.SubCategory", b =>
+                {
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("ecommerceApi.Entities.User", b =>

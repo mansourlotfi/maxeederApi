@@ -36,7 +36,8 @@ namespace ecommerceApi.Controllers
                 Description = x.Description,
                 Price = x.Price,
                 QuantityInStock = x.QuantityInStock,
-                Type = x.Type,
+                SubCategoryId = x.SubCategoryId,
+                SubCategory = x.SubCategory,
                 IsFeatured = x.IsFeatured,
                 PictureUrl = String.Format("{0}://{1}{2}/Images/{3}",Request.Scheme,Request.Host,Request.PathBase, x.PictureUrl) ,
                 Features=x.Features,
@@ -52,7 +53,7 @@ namespace ecommerceApi.Controllers
                 }),
                 Priority = x.Priority,
                 ShowPrice = x.ShowPrice,
-                SubCategory = x.SubCategory,
+                CommentList = (List<Comment>)x.CommentList
             })
             .Sort(productParams.OrderBy)
             .Search(productParams.SearchTerm)
@@ -80,7 +81,8 @@ namespace ecommerceApi.Controllers
                 Description = x.Description,
                 Price = x.Price,
                 QuantityInStock = x.QuantityInStock,
-                Type = x.Type,
+                SubCategoryId = x.SubCategoryId,
+                SubCategory = x.SubCategory,
                 IsFeatured = x.IsFeatured,
                 PictureUrl = String.Format("{0}://{1}{2}/Images/{3}", Request.Scheme, Request.Host, Request.PathBase, x.PictureUrl),
                 Features=x.Features,
@@ -92,7 +94,7 @@ namespace ecommerceApi.Controllers
                 MediaList=x.MediaList,
                 Priority = x.Priority,
                 ShowPrice = x.ShowPrice,
-                SubCategory = x.SubCategory,
+                CommentList=x.CommentList
             }).AsQueryable();
 
             var products = await PagedList<Product>.ToPagedList(query, 1, 10);
@@ -104,7 +106,7 @@ namespace ecommerceApi.Controllers
         [HttpGet("{id}", Name = "GetProduct")]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
-            var product = await _context.Products.Include(x => x.Features).ThenInclude(f => f.Feature).Include(x=>x.MediaList).Include(Y=>Y.CommentList).FirstOrDefaultAsync(x=>x.Id == id);
+            var product = await _context.Products.Include(x => x.Features).ThenInclude(f => f.Feature).Include(x=>x.MediaList).Include(Y=>Y.CommentList).Include(z=>z.SubCategory).ThenInclude(w=>w.Category).FirstOrDefaultAsync(x=>x.Id == id);
 
             if (product == null) return NotFound();
 
@@ -125,7 +127,7 @@ namespace ecommerceApi.Controllers
         public async Task<IActionResult> GetFilters()
         {
             var brands = await _context.Products.Select(p => p.Brand).Distinct().ToListAsync();
-            var types = await _context.Products.Select(p => p.Type).Distinct().ToListAsync();
+            var types = await _context.Products.Select(p => p.SubCategory).Distinct().ToListAsync();
             var size = await _context.Products.Select(p => p.Size).Distinct().ToListAsync();
             var usage = await _context.Products.Select(p => p.Usage).Distinct().ToListAsync();
 
@@ -142,6 +144,7 @@ namespace ecommerceApi.Controllers
             if (existing != null) return BadRequest(new ProblemDetails { Title = "Item with this priority exist" });
 
             var product = _mapper.Map<Product>(productDto);
+
             if (productDto.Features?.Count > 0)
             {
                 foreach (var item in productDto.Features)
@@ -153,7 +156,26 @@ namespace ecommerceApi.Controllers
                 });
                 }
             }
-                                    
+
+            if (productDto.SubCategoryId != null)
+            {
+
+                var existingSubCategory = await _context.SubCategories.FirstOrDefaultAsync(x => x.Id == productDto.SubCategoryId);
+
+                if (existingSubCategory != null)
+                {
+                    product.SubCategoryId = productDto.SubCategoryId;
+                    product.SubCategory = existingSubCategory;
+
+                }
+                else
+                {
+                    return BadRequest(new ProblemDetails { Title = "Problem creating new product with given sub category id" });
+
+                }
+
+            }
+
 
             if (productDto.IsFeatured != true)
             {
@@ -223,6 +245,20 @@ namespace ecommerceApi.Controllers
                     {
                         FeatureId = item
                     });
+                }
+
+            }
+
+            if (productDto.SubCategoryId != null)
+            {
+
+                var existingSubCategory = await _context.SubCategories.FirstOrDefaultAsync(x => x.Id == productDto.SubCategoryId);
+
+                if (existingSubCategory != null)
+                {
+                    product.SubCategoryId = productDto.SubCategoryId;
+                    product.SubCategory = existingSubCategory;
+
                 }
 
             }

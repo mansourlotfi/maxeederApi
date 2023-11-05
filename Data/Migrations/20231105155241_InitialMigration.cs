@@ -8,11 +8,35 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ecommerceApi.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateEntitiesWithIsActive : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Articles",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Link = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PictureUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    RitchText = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true),
+                    TitleEn = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RitchTextEn = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Page = table.Column<int>(type: "int", nullable: false),
+                    AddedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ShortDesc = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ShortDescEn = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Articles", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Artists",
                 columns: table => new
@@ -23,7 +47,9 @@ namespace ecommerceApi.Data.Migrations
                     Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PictureUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Priority = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: true)
+                    IsActive = table.Column<bool>(type: "bit", nullable: true),
+                    NameEn = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TextEn = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -94,7 +120,8 @@ namespace ecommerceApi.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PictureUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: true)
+                    IsActive = table.Column<bool>(type: "bit", nullable: true),
+                    NameEn = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -126,7 +153,8 @@ namespace ecommerceApi.Data.Migrations
                     Link = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PictureUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Priority = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: true)
+                    IsActive = table.Column<bool>(type: "bit", nullable: true),
+                    NameEn = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -134,17 +162,16 @@ namespace ecommerceApi.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CeoOptimizations",
+                name: "CustomUserRoles",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    MetaTagKeyWords = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    MetaTagDescription = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CeoOptimizations", x => x.Id);
+                    table.PrimaryKey("PK_CustomUserRoles", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -154,7 +181,8 @@ namespace ecommerceApi.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: true)
+                    IsActive = table.Column<bool>(type: "bit", nullable: true),
+                    NameEn = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -170,7 +198,9 @@ namespace ecommerceApi.Data.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PictureUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: true)
+                    IsActive = table.Column<bool>(type: "bit", nullable: true),
+                    NameEn = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DescriptionEn = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -187,7 +217,8 @@ namespace ecommerceApi.Data.Migrations
                     Link = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PictureUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Priority = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: true)
+                    IsActive = table.Column<bool>(type: "bit", nullable: true),
+                    NameEn = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -203,7 +234,8 @@ namespace ecommerceApi.Data.Migrations
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Link = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Priority = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: true)
+                    IsActive = table.Column<bool>(type: "bit", nullable: true),
+                    TitleEn = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -268,7 +300,11 @@ namespace ecommerceApi.Data.Migrations
                     Priority = table.Column<int>(type: "int", nullable: false),
                     RitchText = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Page = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: true)
+                    IsActive = table.Column<bool>(type: "bit", nullable: true),
+                    TitleEn = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TextEn = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ShortDesc = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ShortDescEn = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -288,32 +324,17 @@ namespace ecommerceApi.Data.Migrations
                     Tel = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Long = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Lat = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: true)
+                    IsActive = table.Column<bool>(type: "bit", nullable: true),
+                    TitleEn = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CeoEn = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    StateEn = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CityEn = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AddressEn = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Partners", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Products",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Price = table.Column<long>(type: "bigint", nullable: true),
-                    PictureUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Brand = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    QuantityInStock = table.Column<int>(type: "int", nullable: false),
-                    IsFeatured = table.Column<bool>(type: "bit", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Products", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -325,11 +346,35 @@ namespace ecommerceApi.Data.Migrations
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Link = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Priority = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: true)
+                    IsActive = table.Column<bool>(type: "bit", nullable: true),
+                    TitleEn = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_QuickAccess", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SeoOptimizations",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Text = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TextEn = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DescriptionEn = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MetaTagKeyWords = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MetaTagKeyWordsEn = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MetaTagDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MetaTagDescriptionEn = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Page = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SeoOptimizations", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -338,18 +383,34 @@ namespace ecommerceApi.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AddressEn = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FooterText = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ContactUsRitchText = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ServicesRitchText = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ServicePictureUrl = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    FooterTextEn = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    WorkHours = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    WorkHoursEn = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ProductCountInPage = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Settings", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Sizes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SizeName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true),
+                    SizeNameEn = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Sizes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -363,7 +424,8 @@ namespace ecommerceApi.Data.Migrations
                     PictureUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Page = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: true)
+                    IsActive = table.Column<bool>(type: "bit", nullable: true),
+                    NameEn = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -380,11 +442,27 @@ namespace ecommerceApi.Data.Migrations
                     Link = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PictureUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Priority = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: true)
+                    IsActive = table.Column<bool>(type: "bit", nullable: true),
+                    NameEn = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SocialNetworks", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Usages",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true),
+                    NameEn = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Usages", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -494,25 +572,6 @@ namespace ecommerceApi.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CustomUserRoles",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CustomUserRoles", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_CustomUserRoles_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "UserAddress",
                 columns: table => new
                 {
@@ -531,6 +590,31 @@ namespace ecommerceApi.Data.Migrations
                         name: "FK_UserAddress_AspNetUsers_Id",
                         column: x => x.Id,
                         principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SubCategories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Link = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PictureUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true),
+                    NameEn = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CategoryId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SubCategories", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SubCategories_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -559,6 +643,39 @@ namespace ecommerceApi.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Products",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Price = table.Column<long>(type: "bigint", nullable: true),
+                    PictureUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SubCategoryId = table.Column<int>(type: "int", nullable: true),
+                    Brand = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    QuantityInStock = table.Column<int>(type: "int", nullable: false),
+                    IsFeatured = table.Column<bool>(type: "bit", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true),
+                    Usage = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Size = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NameEn = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DescriptionEn = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    ShowPrice = table.Column<bool>(type: "bit", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Products", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Products_SubCategories_SubCategoryId",
+                        column: x => x.SubCategoryId,
+                        principalTable: "SubCategories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "BasketItems",
                 columns: table => new
                 {
@@ -579,6 +696,48 @@ namespace ecommerceApi.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_BasketItems_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Comments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    ProductId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Comments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Comments_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MediaList",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MediaFileName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProductId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MediaList", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MediaList_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "Id",
@@ -614,9 +773,15 @@ namespace ecommerceApi.Data.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, "02a14cb5-2cc9-4cf9-b1fd-65732f1e55dc", "Member", "MEMBER" },
-                    { 2, "dd819276-4724-4719-9bf6-de9d1193aba8", "Admin", "ADMIN" }
+                    { 1, "e9ce6d7e-2377-47f3-bbd6-94aa39c78482", "Member", "MEMBER" },
+                    { 2, "0360f135-6692-45d2-9e94-70cd056bd9e0", "Admin", "ADMIN" }
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Articles_Priority",
+                table: "Articles",
+                column: "Priority",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -674,9 +839,9 @@ namespace ecommerceApi.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_CustomUserRoles_UserId",
-                table: "CustomUserRoles",
-                column: "UserId");
+                name: "IX_Comments_ProductId",
+                table: "Comments",
+                column: "ProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Logos_Priority",
@@ -691,6 +856,11 @@ namespace ecommerceApi.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_MediaList_ProductId",
+                table: "MediaList",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OrderItem_OrderId",
                 table: "OrderItem",
                 column: "OrderId");
@@ -701,8 +871,19 @@ namespace ecommerceApi.Data.Migrations
                 column: "FeatureId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Products_SubCategoryId",
+                table: "Products",
+                column: "SubCategoryId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_QuickAccess_Priority",
                 table: "QuickAccess",
+                column: "Priority",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SeoOptimizations_Priority",
+                table: "SeoOptimizations",
                 column: "Priority",
                 unique: true);
 
@@ -717,11 +898,25 @@ namespace ecommerceApi.Data.Migrations
                 table: "SocialNetworks",
                 column: "Priority",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SubCategories_CategoryId",
+                table: "SubCategories",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SubCategories_Priority",
+                table: "SubCategories",
+                column: "Priority",
+                unique: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Articles");
+
             migrationBuilder.DropTable(
                 name: "Artists");
 
@@ -750,10 +945,7 @@ namespace ecommerceApi.Data.Migrations
                 name: "Brokers");
 
             migrationBuilder.DropTable(
-                name: "Categories");
-
-            migrationBuilder.DropTable(
-                name: "CeoOptimizations");
+                name: "Comments");
 
             migrationBuilder.DropTable(
                 name: "CustomUserRoles");
@@ -766,6 +958,9 @@ namespace ecommerceApi.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "MainMenuItems");
+
+            migrationBuilder.DropTable(
+                name: "MediaList");
 
             migrationBuilder.DropTable(
                 name: "Messages");
@@ -786,13 +981,22 @@ namespace ecommerceApi.Data.Migrations
                 name: "QuickAccess");
 
             migrationBuilder.DropTable(
+                name: "SeoOptimizations");
+
+            migrationBuilder.DropTable(
                 name: "Settings");
+
+            migrationBuilder.DropTable(
+                name: "Sizes");
 
             migrationBuilder.DropTable(
                 name: "Slides");
 
             migrationBuilder.DropTable(
                 name: "SocialNetworks");
+
+            migrationBuilder.DropTable(
+                name: "Usages");
 
             migrationBuilder.DropTable(
                 name: "UserAddress");
@@ -814,6 +1018,12 @@ namespace ecommerceApi.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "SubCategories");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
         }
     }
 }

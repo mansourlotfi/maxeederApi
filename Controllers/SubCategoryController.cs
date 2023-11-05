@@ -35,6 +35,8 @@ namespace ecommerceApi.Controllers
                 Priority = x.Priority,
                 IsActive = x.IsActive,
                 NameEn = x.NameEn,
+                Category=x.Category,
+                CategoryId = x.CategoryId,
                 
                 
             }).SearchSubCategory(paginationParams.SearchTerm).AsQueryable();
@@ -83,6 +85,20 @@ namespace ecommerceApi.Controllers
                     return BadRequest(new ProblemDetails { Title = "Problem uploading new image" });
 
                 category.PictureUrl = fileName;
+            }
+
+            var existingCategory = await _context.Categories.FirstOrDefaultAsync(x => x.Id == categoryDto.CategoryId);
+
+            if (existingCategory != null)
+            {
+                category.CategoryId = categoryDto.CategoryId;
+                category.Category = existingCategory;
+
+            }
+            else
+            {
+                return BadRequest(new ProblemDetails { Title = "Problem creating new sub category" });
+
             }
 
             _context.SubCategories.Add(category);
@@ -172,7 +188,7 @@ namespace ecommerceApi.Controllers
 
                 if (item == null) return NotFound();
 
-                item.IsActive = !item.IsActive;
+                item.IsActive = !(bool)item.IsActive;
 
             }
 

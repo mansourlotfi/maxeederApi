@@ -1,4 +1,6 @@
 ﻿using ecommerceApi.Entities;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace ecommerceApi.Extensions
 {
@@ -28,7 +30,7 @@ namespace ecommerceApi.Extensions
         public static IQueryable<Product> Filter(this IQueryable<Product> query, string? brands, string? types, string? size,string? usage,bool? isActive,bool? showPrice)
         {
             var brandList = new List<string>();
-            var typeList = new List<string>();
+            var categoryList = new List<string>();
             var sizeList = new List<string>();
             var usageList = new List<string>();
     
@@ -38,7 +40,7 @@ namespace ecommerceApi.Extensions
 
 
             if (!string.IsNullOrEmpty(types))
-                typeList.AddRange(types.ToLower().Split(",").ToList());
+                categoryList.AddRange(types.ToLower().Split(",").ToList());
 
             if (!string.IsNullOrEmpty(size))
                 sizeList.AddRange(size.ToLower().Split(",").ToList());
@@ -49,7 +51,7 @@ namespace ecommerceApi.Extensions
 
 
             query = query.Where(p => brandList.Count == 0 || brandList.Contains(p.Brand.ToLower()));
-            query = query.Where(p => typeList.Count == 0 || typeList.Contains(p.Type.ToLower()));
+            query = query.Where(p => categoryList.Count == 0 || categoryList.Contains(p.SubCategory.Name.ToLower()));
             query = query.Where(p => sizeList.Count == 0 || sizeList.Contains(p.Size.ToLower()));
             query = query.Where(p => usageList.Count == 0 || usageList.Contains(p.Usage.ToLower()));
             query = query.Where(p => isActive == null || p.IsActive == isActive);

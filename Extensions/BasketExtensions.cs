@@ -19,7 +19,7 @@ namespace ecommerceApi.Extensions
                     Name = item.Product.Name,
                     Price = item.Product.Price??0,
                     PictureUrl = item.Product.PictureUrl,
-                    Type = item.Product.Type,
+                    SubCategory = item.Product.SubCategory,
                     Brand = item.Product.Brand,
                     Quantity = item.Quantity
                 }).ToList()
