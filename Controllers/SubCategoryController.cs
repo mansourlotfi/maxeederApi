@@ -24,9 +24,9 @@ namespace ecommerceApi.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<PagedList<SubCategory>>> GetCategories([FromQuery] PaginationParams? paginationParams)
+        public async Task<ActionResult<PagedList<SubCategory>>> GetCategories([FromQuery] SubCategoryParams? paginationParams)
         {
-            var query =  _context.SubCategories.Select(x => new SubCategory()
+            var query =  _context.SubCategories.Where(x => x.CategoryId == paginationParams.CategoryId).Select(x => new SubCategory()
             {
                 Id = x.Id,
                 Name = x.Name,
