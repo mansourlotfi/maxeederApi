@@ -12,8 +12,8 @@ using ecommerceApi.Data;
 namespace ecommerceApi.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20231106100119_EmtyMigration")]
-    partial class EmtyMigration
+    [Migration("20231106131911_changeDelBehavior")]
+    partial class changeDelBehavior
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -905,14 +905,14 @@ namespace ecommerceApi.Data.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "7fc4080e-6421-4f5e-b4bd-f41c44c5a52a",
+                            ConcurrencyStamp = "023e4551-533c-491e-8d03-a6ec0a88198f",
                             Name = "Member",
                             NormalizedName = "MEMBER"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "b70fef68-1fdc-43d5-b180-fd3ecc04a21e",
+                            ConcurrencyStamp = "a01ac8b6-f39b-409f-95bc-cca155f13ce2",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -1448,7 +1448,7 @@ namespace ecommerceApi.Data.Migrations
                     b.HasOne("ecommerceApi.Entities.SubCategory", "SubCategory")
                         .WithMany("Product")
                         .HasForeignKey("SubCategoryId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("SubCategory");
                 });

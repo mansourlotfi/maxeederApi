@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ecommerceApi.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class changeDelBehavior : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -672,7 +672,7 @@ namespace ecommerceApi.Data.Migrations
                         column: x => x.SubCategoryId,
                         principalTable: "SubCategories",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -773,8 +773,8 @@ namespace ecommerceApi.Data.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, "e9ce6d7e-2377-47f3-bbd6-94aa39c78482", "Member", "MEMBER" },
-                    { 2, "0360f135-6692-45d2-9e94-70cd056bd9e0", "Admin", "ADMIN" }
+                    { 1, "023e4551-533c-491e-8d03-a6ec0a88198f", "Member", "MEMBER" },
+                    { 2, "a01ac8b6-f39b-409f-95bc-cca155f13ce2", "Admin", "ADMIN" }
                 });
 
             migrationBuilder.CreateIndex(

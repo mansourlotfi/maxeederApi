@@ -60,7 +60,8 @@ namespace ecommerceApi.Data
                 .WithOne(e => e.SubCategory)
                 .HasForeignKey(e => e.SubCategoryId)
                 .IsRequired(false)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
+
 
 
             builder.Entity<Category>()

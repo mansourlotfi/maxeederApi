@@ -206,7 +206,7 @@ namespace ecommerceApi.Controllers
         [HttpPut]
         public async Task<ActionResult<Product>> UpdateProduct([FromForm] UpdateProductDto productDto)
         {
-            var product = await _context.Products.Include(x=>x.Features).ThenInclude(y=>y.Feature).FirstOrDefaultAsync(x=>x.Id == productDto.Id);
+            var product = await _context.Products.Include(x=>x.Features).ThenInclude(y=>y.Feature).Include(z=>z.SubCategory).FirstOrDefaultAsync(x=>x.Id == productDto.Id);
 
 
             if (product == null) return NotFound();
@@ -249,19 +249,7 @@ namespace ecommerceApi.Controllers
 
             }
 
-            if (productDto.SubCategoryId != null)
-            {
 
-                var existingSubCategory = await _context.SubCategories.FirstOrDefaultAsync(x => x.Id == productDto.SubCategoryId);
-
-                if (existingSubCategory != null)
-                {
-                    product.SubCategoryId = productDto.SubCategoryId;
-                    product.SubCategory = existingSubCategory;
-
-                }
-
-            }
 
             _mapper.Map(productDto, product);
 
