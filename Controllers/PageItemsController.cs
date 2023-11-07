@@ -53,6 +53,18 @@ namespace ecommerceApi.Controllers
         }
 
 
+        [HttpGet("MaxPriority")]
+        public async Task<ActionResult<int>> GetMaxPriorityPageItems()
+        {
+            var maxPriorityNo = _context.PageItems.Max(p => p.Priority);
+
+            if (maxPriorityNo == null || maxPriorityNo == 0) return 1;
+
+            return Ok(maxPriorityNo);
+
+        }
+
+
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<PageItem>> CreatePageItem([FromForm] CreatePageItemDto createPageItemDto)

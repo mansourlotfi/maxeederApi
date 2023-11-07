@@ -59,6 +59,17 @@ namespace ecommerceApi.Controllers
 
         }
 
+        [HttpGet("MaxPriority")]
+        public async Task<ActionResult<int>> GetMaxPrioritySubCategory()
+        {
+            var maxPriorityNo =  _context.SubCategories.Max(p => p.Priority) ;
+
+            if (maxPriorityNo == null || maxPriorityNo == 0) return 1;
+
+            return Ok(maxPriorityNo);
+
+        }
+
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
