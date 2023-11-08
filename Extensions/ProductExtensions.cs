@@ -27,10 +27,11 @@ namespace ecommerceApi.Extensions
             return query.Where(p => p.Name.ToLower().Contains(lowerCaseSearchTerm));
         }
 
-        public static IQueryable<Product> Filter(this IQueryable<Product> query, string? brands, string? types, string? size,string? usage,bool? isActive,bool? showPrice)
+        public static IQueryable<Product> Filter(this IQueryable<Product> query, string? brands, string? category,string? subCategory, string? size,string? usage,bool? isActive,bool? showPrice)
         {
             var brandList = new List<string>();
             var categoryList = new List<string>();
+            var subCategoryList = new List<string>();
             var sizeList = new List<string>();
             var usageList = new List<string>();
     
@@ -38,9 +39,11 @@ namespace ecommerceApi.Extensions
             if (!string.IsNullOrEmpty(brands))
                 brandList.AddRange(brands.ToLower().Split(",").ToList());
 
+            if (!string.IsNullOrEmpty(category))
+                categoryList.AddRange(category.ToLower().Split(",").ToList());
 
-            if (!string.IsNullOrEmpty(types))
-                categoryList.AddRange(types.ToLower().Split(",").ToList());
+            if (!string.IsNullOrEmpty(subCategory))
+                subCategoryList.AddRange(subCategory.ToLower().Split(",").ToList());
 
             if (!string.IsNullOrEmpty(size))
                 sizeList.AddRange(size.ToLower().Split(",").ToList());
@@ -51,7 +54,8 @@ namespace ecommerceApi.Extensions
 
 
             query = query.Where(p => brandList.Count == 0 || brandList.Contains(p.Brand.ToLower()));
-            query = query.Where(p => categoryList.Count == 0 || categoryList.Contains(p.SubCategory.Name.ToLower()));
+            query = query.Where(p => categoryList.Count == 0 || categoryList.Contains(p.SubCategory.Category.Name.ToLower()));
+            query = query.Where(p => subCategoryList.Count == 0 || subCategoryList.Contains(p.SubCategory.Name.ToLower()));
             query = query.Where(p => sizeList.Count == 0 || sizeList.Contains(p.Size.ToLower()));
             query = query.Where(p => usageList.Count == 0 || usageList.Contains(p.Usage.ToLower()));
             query = query.Where(p => isActive == null || p.IsActive == isActive);

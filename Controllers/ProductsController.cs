@@ -28,7 +28,7 @@ namespace ecommerceApi.Controllers
         public async Task<ActionResult<PagedList<Product>>> GetProducts([FromQuery] ProductParams? productParams)
         {
             // return await _context.Products.ToListAsync();
-            var query = _context.Products.Include(x=>x.Features).ThenInclude(f=>f.Feature).Select(x=> new Product()
+            var query = _context.Products.Include(x=>x.Features).ThenInclude(f=>f.Feature).Include(y=>y.SubCategory).ThenInclude(z=>z.Category).Select(x=> new Product()
             {
                 Id = x.Id,
                 Brand = x.Brand,
@@ -57,7 +57,7 @@ namespace ecommerceApi.Controllers
             })
             .Sort(productParams.OrderBy)
             .Search(productParams.SearchTerm)
-            .Filter(productParams.Brands, productParams.Types,productParams.Size, productParams.Usage, productParams.IsActive, productParams.ShowPrice)
+            .Filter(productParams.Brands, productParams.Category, productParams.SubCategory,productParams.Size, productParams.Usage, productParams.IsActive, productParams.ShowPrice)
             .AsQueryable();
 
             var products = await PagedList<Product>.ToPagedList(query, productParams.PageNumber, productParams.PageSize);
